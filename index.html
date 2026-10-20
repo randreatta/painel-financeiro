@@ -157,7 +157,6 @@ details summary { cursor: pointer; font-weight: 600; font-size: 15px; }
 .settle select { padding: 3px 8px; font-size: 12.5px; }
 </style>
 <script src="config.js"></script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 <div class="wrap">
@@ -194,7 +193,8 @@ details summary { cursor: pointer; font-weight: 600; font-size: 15px; }
     <p>Use a conta Google que tem acesso à planilha.</p>
     <button class="gbtn" id="btnLogin"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.2C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.7c4.3-4 6.9-9.9 6.9-17.1z"/><path fill="#FBBC05" d="M10.6 28.5c-.5-1.4-.8-2.9-.8-4.5s.3-3.1.8-4.5l-7.9-6.2C1 16.6 0 20.2 0 24s1 7.4 2.7 10.7l7.9-6.2z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.7c-2.1 1.4-4.8 2.3-8.5 2.3-6.2 0-11.5-4.1-13.4-9.8l-7.9 6.2C6.6 42.6 14.6 48 24 48z"/></svg>Entrar com Google</button>
     <div class="err" id="loginErr"></div>
-    <div class="small">Os dados ficam na sua planilha do Google; este site só os lê no seu navegador.<br><a href="?demo">Ver com dados de exemplo</a></div>
+    <div class="small">Os dados ficam na sua planilha do Google; este site só os lê no seu navegador.<br><a href="?demo">Ver com dados de exemplo</a>
+      <br><br>Endereço de retorno cadastrado no Google Cloud:<br><code id="redirHint"></code></div>
   </section>
   <div id="loading" class="loading">Lendo seus dados…</div>
 
@@ -833,12 +833,12 @@ function load(raw, sourceLabel, live) {
   document.getElementById('srcDot').classList.toggle('live', !!live);
   render();
 }
-/* ---- Google: login (Google Identity Services) + leitura pela API do Sheets ---- */
+/* ---- Google: login (OAuth na mesma aba, sem pop-up) + leitura pela API do Sheets ---- */
 const CFG = window.CONFIG || {};
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly openid email';
 const configured = !!(CFG.CLIENT_ID && CFG.SPREADSHEET_ID && !/COLE_/.test(CFG.CLIENT_ID + CFG.SPREADSHEET_ID));
 const demoMode = new URLSearchParams(location.search).has('demo');
-const auth = { token: null, exp: 0, email: '', client: null };
+const auth = { token: null, exp: 0, email: '' };
 const ss = { get(k) { try { return JSON.parse(sessionStorage.getItem(k)); } catch (e) { return null; } },
              set(k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
              del(k) { try { sessionStorage.removeItem(k); } catch (e) {} } };
@@ -851,37 +851,48 @@ function showLogin(msg) {
   show('userBox', false); show('btnLogout', false); show('controls', false);
   document.getElementById('alerts').innerHTML = '';
   document.getElementById('loginErr').textContent = msg || '';
-  document.getElementById('srcText').textContent = 'Desconectado';
+  document.getElementById('srcText').textContent = 'Entre para ver seus dados';
   document.getElementById('srcDot').classList.remove('live');
 }
-function whenGis() {
-  return new Promise((ok, fail) => { let n = 0; const t = setInterval(() => {
-    if (window.google && google.accounts && google.accounts.oauth2) { clearInterval(t); ok(); }
-    else if (++n > 100) { clearInterval(t); fail(new Error('não consegui carregar o login do Google (verifique a conexão ou bloqueadores).')); }
-  }, 100); });
-}
-async function login() {
-  document.getElementById('loginErr').textContent = '';
-  try { await whenGis(); } catch (e) { document.getElementById('loginErr').textContent = 'Erro: ' + e.message; return; }
-  if (!auth.client) auth.client = google.accounts.oauth2.initTokenClient({
-    client_id: CFG.CLIENT_ID, scope: SCOPES,
-    callback: async resp => {
-      if (resp.error) { showLogin('Login não concluído: ' + resp.error); return; }
-      auth.token = resp.access_token; auth.exp = Date.now() + (resp.expires_in - 60) * 1000;
-      try {
-        const u = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', { headers: { Authorization: 'Bearer ' + auth.token } });
-        if (u.ok) auth.email = (await u.json()).email || '';
-      } catch (e) {}
-      ss.set('fin_auth', { token: auth.token, exp: auth.exp, email: auth.email });
-      if (auth.email) ls.set('fin_email', auth.email);
-      loadFromSheet();
-    },
-    error_callback: err => showLogin(err && err.type === 'popup_closed' ? 'A janela de login foi fechada.' : 'Não consegui abrir o login do Google (pop-up bloqueado?).'),
+// Endereço para onde o Google devolve depois do login (precisa estar cadastrado no Google Cloud)
+const REDIRECT_URI = location.origin + location.pathname.replace(/index\.html$/, '');
+function login() {
+  const st = Math.random().toString(36).slice(2) + Date.now().toString(36);
+  ss.set('fin_state', st);
+  const q = new URLSearchParams({
+    client_id: CFG.CLIENT_ID, redirect_uri: REDIRECT_URI, response_type: 'token',
+    scope: SCOPES, include_granted_scopes: 'true', state: st, prompt: 'select_account',
   });
-  auth.client.requestAccessToken({ prompt: '', login_hint: ls.get('fin_email') || undefined });
+  const hint = ls.get('fin_email'); if (hint) q.set('login_hint', hint);
+  location.assign('https://accounts.google.com/o/oauth2/v2/auth?' + q);
+}
+// Lê o retorno do Google (#access_token=... ou #error=...) e limpa o endereço
+function handleRedirect() {
+  if (!location.hash || location.hash.length < 2) return null;
+  const h = new URLSearchParams(location.hash.slice(1));
+  if (!h.has('access_token') && !h.has('error')) return null;
+  history.replaceState(null, '', location.pathname + location.search);
+  const expected = ss.get('fin_state'); ss.del('fin_state');
+  if (h.get('error')) return { error: h.get('error') === 'access_denied'
+    ? 'Login cancelado ou conta não autorizada (ela está nos usuários de teste do Google Cloud?).' : 'Login não concluído: ' + h.get('error') };
+  if (!expected || h.get('state') !== expected) return { error: 'Retorno de login inválido. Tente entrar de novo.' };
+  const scopes = h.get('scope') || '';
+  if (!scopes.includes('spreadsheets')) return { error: 'Faltou permitir a leitura das planilhas. Entre de novo e marque essa permissão.' };
+  return { token: h.get('access_token'), exp: Date.now() + (Number(h.get('expires_in') || 3600) - 60) * 1000 };
+}
+async function afterLogin(tok) {
+  auth.token = tok.token; auth.exp = tok.exp;
+  try {
+    const u = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', { headers: { Authorization: 'Bearer ' + auth.token } });
+    if (u.ok) auth.email = (await u.json()).email || '';
+  } catch (e) {}
+  ss.set('fin_auth', { token: auth.token, exp: auth.exp, email: auth.email });
+  if (auth.email) ls.set('fin_email', auth.email);
+  loadFromSheet();
 }
 function logout() {
-  if (auth.token && window.google && google.accounts) google.accounts.oauth2.revoke(auth.token, () => {});
+  if (auth.token) fetch('https://oauth2.googleapis.com/revoke', { method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'token=' + encodeURIComponent(auth.token) }).catch(() => {});
   auth.token = null; auth.exp = 0; ss.del('fin_auth');
   showLogin('Você saiu.');
 }
@@ -956,8 +967,11 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ren
 
 // ---- início
 if (configured && !demoMode) {
-  const saved = ss.get('fin_auth');
-  if (saved && saved.token && Date.now() < saved.exp) { Object.assign(auth, saved); loadFromSheet(); }
+  document.getElementById('redirHint').textContent = REDIRECT_URI;
+  const back = handleRedirect(), saved = ss.get('fin_auth');
+  if (back && back.error) showLogin(back.error);
+  else if (back) afterLogin(back);
+  else if (saved && saved.token && Date.now() < saved.exp) { Object.assign(auth, saved); loadFromSheet(); }
   else showLogin();
 } else {
   show('btnUpload', true);
