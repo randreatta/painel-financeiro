@@ -5,7 +5,6 @@ Para ver os dados é preciso **entrar com uma conta Google que tenha acesso à p
 O repositório não guarda nenhum dado financeiro, só o código.
 
 - Editou a planilha → clique em **↻ Atualizar** no site. Não precisa mexer no GitHub.
-- `?demo` no fim do endereço mostra o painel com dados de exemplo.
 - `modelo/planilha-modelo.xlsx` é a planilha modelo (estrutura das abas).
 
 ---
@@ -20,7 +19,7 @@ O repositório não guarda nenhum dado financeiro, só o código.
    (`index.html`, `config.js`, `README.md` e a pasta `modelo`) → **Commit changes**.
 3. **Settings → Pages** → em *Build and deployment*: Source **Deploy from a branch**, Branch **main** e pasta **/ (root)** → **Save**.
 4. Em 1–2 minutos o site fica no ar em `https://SEU-USUARIO.github.io/painel-financeiro/`.
-   Ao abrir, ele mostra os dados de exemplo e o aviso para preencher o `config.js`, o que é esperado nessa etapa.
+   Ao abrir, ele mostra "Site não configurado" até você preencher o `config.js`, o que é esperado nessa etapa.
 
 ### 2. Criar o login com Google (Google Cloud)
 
