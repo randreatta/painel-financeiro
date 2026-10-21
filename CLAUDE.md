@@ -108,5 +108,5 @@ Não há testes automatizados no repositório. O que funciona bem:
 |---|---|
 | "A janela de login foi fechada" + aviso de COOP no console | Login por pop-up. Use o redirect. |
 | `Erro 401: invalid_client` | `CLIENT_ID` errado ou cliente recém-criado (leva alguns minutos para valer). |
-| `redirect_uri_mismatch` | O endereço de retorno não está cadastrado no cliente OAuth. A tela de login mostra o valor exato. |
+| `redirect_uri_mismatch` | O endereço de retorno não está cadastrado no cliente OAuth. Cadastre exatamente `https://randreatta.github.io/painel-financeiro/` (com a barra final). |
 | Site antigo depois de publicar | Cache do navegador (Ctrl+Shift+R ou janela anônima) ou Pages ainda publicando. |
