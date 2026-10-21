@@ -67,6 +67,7 @@ select, .btn {
   border-radius: 9px; padding: 7px 12px; cursor: pointer;
 }
 .btn:hover, select:hover { background: var(--surface-2); }
+a.btn { text-decoration: none; display: inline-flex; align-items: center; }
 .btn.primary { background: var(--s1); border-color: transparent; color: #fff; }
 .grid { display: grid; gap: 16px; grid-template-columns: repeat(12, 1fr); }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; box-shadow: var(--shadow); min-width: 0; }
@@ -195,6 +196,7 @@ details summary { cursor: pointer; font-weight: 600; font-size: 15px; }
         <option value="36">36 meses</option>
         <option value="60">60 meses</option>
       </select>
+      <a class="btn hidden" id="btnSheet" target="_blank" rel="noopener" title="Abrir a planilha no Google Sheets para lançar valores">Editar planilha ↗</a>
       <button class="btn" id="btnRefresh" title="Ler a planilha de novo">↻ Atualizar</button>
       <span class="user hidden" id="userBox"></span>
       <button class="btn hidden" id="btnLogout" title="Sair da conta Google neste site">Sair</button>
@@ -1069,6 +1071,9 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ren
 
 // ---- início
 if (configured && !demoMode) {
+  const sheetLink = document.getElementById('btnSheet');
+  sheetLink.href = 'https://docs.google.com/spreadsheets/d/' + encodeURIComponent(CFG.SPREADSHEET_ID) + '/edit';
+  sheetLink.classList.remove('hidden');
   document.getElementById('redirHint').textContent = REDIRECT_URI;
   const back = handleRedirect(), saved = ss.get('fin_auth');
   if (back && back.error) showLogin(back.error);
