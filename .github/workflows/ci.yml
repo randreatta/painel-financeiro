@@ -1,0 +1,22 @@
+name: Testes e build
+on:
+  push:
+    branches: [migracao-cloudflare]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  testar:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Testes (paridade com o painel v1)
+        run: TZ=America/Sao_Paulo npx vitest run --reporter=default --reporter=github-actions
+      - name: Tipos e build
+        run: npm run build
+      - name: Resumo
+        run: echo "::notice title=build::$(ls dist/assets | tr '\n' ' ')"
