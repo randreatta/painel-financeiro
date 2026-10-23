@@ -1,0 +1,485 @@
+{
+ "_planilha": "Ficticia",
+ "Premissas": [
+  {
+   "Chave": "pessoa_1",
+   "Parâmetro": "",
+   "Valor": "Bruno"
+  },
+  {
+   "Chave": "pessoa_2",
+   "Parâmetro": "",
+   "Valor": "Ana"
+  },
+  {
+   "Chave": "divisao_casal",
+   "Parâmetro": "",
+   "Valor": "Igual (50/50)"
+  },
+  {
+   "Chave": "percentual_pessoa_1",
+   "Parâmetro": "",
+   "Valor": 0.6
+  },
+  {
+   "Chave": "saldo_conta",
+   "Parâmetro": "",
+   "Valor": 3200
+  },
+  {
+   "Chave": "inflacao",
+   "Parâmetro": "",
+   "Valor": 0.045
+  },
+  {
+   "Chave": "reajuste_salarial",
+   "Parâmetro": "",
+   "Valor": 0.06
+  },
+  {
+   "Chave": "mes_reajuste",
+   "Parâmetro": "",
+   "Valor": 3
+  },
+  {
+   "Chave": "meses_projecao",
+   "Parâmetro": "",
+   "Valor": 24
+  },
+  {
+   "Chave": "meta_reserva_meses",
+   "Parâmetro": "",
+   "Valor": 6
+  },
+  {
+   "Chave": "otimista_variaveis",
+   "Parâmetro": "",
+   "Valor": -0.05
+  },
+  {
+   "Chave": "otimista_inflacao",
+   "Parâmetro": "",
+   "Valor": -0.01
+  },
+  {
+   "Chave": "pessimista_variaveis",
+   "Parâmetro": "",
+   "Valor": 0.15
+  },
+  {
+   "Chave": "pessimista_inflacao",
+   "Parâmetro": "",
+   "Valor": 0.02
+  },
+  {
+   "Chave": "irrf_desconto_simplificado",
+   "Parâmetro": "",
+   "Valor": 607.2
+  },
+  {
+   "Chave": "irrf_isencao_ate",
+   "Parâmetro": "",
+   "Valor": 5000
+  },
+  {
+   "Chave": "irrf_reducao_ate",
+   "Parâmetro": "",
+   "Valor": 7350
+  },
+  {
+   "Chave": "irrf_reducao_constante",
+   "Parâmetro": "",
+   "Valor": 978.62
+  },
+  {
+   "Chave": "irrf_reducao_fator",
+   "Parâmetro": "",
+   "Valor": 0.133145
+  },
+  {
+   "Chave": "sabado_dia_util",
+   "Parâmetro": "",
+   "Valor": "Não"
+  }
+ ],
+ "Tabela INSS": [
+  {
+   "Faixa": "1ª faixa",
+   "De": 0,
+   "Até": 1621,
+   "Alíquota": 0.075
+  },
+  {
+   "Faixa": "2ª faixa",
+   "De": 1621,
+   "Até": 2902.84,
+   "Alíquota": 0.09
+  },
+  {
+   "Faixa": "3ª faixa",
+   "De": 2902.84,
+   "Até": 4354.27,
+   "Alíquota": 0.12
+  },
+  {
+   "Faixa": "4ª faixa",
+   "De": 4354.27,
+   "Até": 8475.55,
+   "Alíquota": 0.14
+  }
+ ],
+ "Tabela IRRF": [
+  {
+   "Faixa": "Isento",
+   "De (base de cálculo)": 0,
+   "Alíquota": 0,
+   "Parcela a deduzir": 0
+  },
+  {
+   "Faixa": "1ª faixa",
+   "De (base de cálculo)": 2428.81,
+   "Alíquota": 0.075,
+   "Parcela a deduzir": 182.16
+  },
+  {
+   "Faixa": "2ª faixa",
+   "De (base de cálculo)": 2826.66,
+   "Alíquota": 0.15,
+   "Parcela a deduzir": 394.16
+  },
+  {
+   "Faixa": "3ª faixa",
+   "De (base de cálculo)": 3751.06,
+   "Alíquota": 0.225,
+   "Parcela a deduzir": 675.49
+  },
+  {
+   "Faixa": "4ª faixa",
+   "De (base de cálculo)": 4664.69,
+   "Alíquota": 0.275,
+   "Parcela a deduzir": 908.73
+  }
+ ],
+ "Receitas Bruno": [
+  {
+   "Descrição": "Salário bruto",
+   "Categoria": "Salário",
+   "Valor": 4338,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Desconta INSS?": "Sim",
+   "Pagamento (dia)": "5º dia útil",
+   "Adiantamento (%)": 0.4,
+   "Dia do adiantamento": 20
+  },
+  {
+   "Descrição": "13º salário",
+   "Categoria": "Salário",
+   "Valor": 4338,
+   "Frequência": "Anual",
+   "Início": 46357,
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Desconta INSS?": "Sim"
+  },
+  {
+   "Descrição": "Freela",
+   "Categoria": "Extra",
+   "Valor": 900,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": 46478,
+   "Reajusta?": "Não",
+   "Pagamento (dia)": 15
+  },
+  {
+   "Descrição": "Restituição do IR",
+   "Categoria": "Extra",
+   "Valor": 1200,
+   "Frequência": "Única",
+   "Início": 46539,
+   "Fim": "",
+   "Reajusta?": "Não"
+  }
+ ],
+ "Receitas Ana": [
+  {
+   "Descrição": "Salário",
+   "Categoria": "Salário",
+   "Valor": 7100,
+   "Frequência": "Mensal",
+   "Reajusta?": "Sim",
+   "Desconta INSS?": "Sim",
+   "Pagamento (dia)": "1º dia útil",
+   "Adiantamento (%)": 0.4,
+   "Dia do adiantamento": 15
+  },
+  {
+   "Descrição": "1/3 de férias",
+   "Categoria": "Salário",
+   "Valor": 2366,
+   "Frequência": "Anual",
+   "Início": 46419,
+   "Reajusta?": "Sim",
+   "Desconta INSS?": "Sim"
+  }
+ ],
+ "Despesas Bruno": [
+  {
+   "Descrição": "Academia",
+   "Categoria": "Saúde",
+   "Tipo": "Fixa",
+   "Valor": 150,
+   "Frequência": "Mensal",
+   "Reajusta?": "Sim",
+   "Cartão": "Nubank Bruno"
+  },
+  {
+   "Descrição": "Combustível",
+   "Categoria": "Transporte",
+   "Tipo": "Variável",
+   "Valor": 400,
+   "Frequência": "Mensal",
+   "Reajusta?": "Sim",
+   "Cartão": "Nubank Bruno"
+  },
+  {
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "Tipo": "Fixa",
+   "Valor": 70,
+   "Frequência": "Mensal",
+   "Reajusta?": "Não",
+   "Dia do pagamento": 12
+  },
+  {
+   "Descrição": "Seguro do carro",
+   "Categoria": "Transporte",
+   "Tipo": "Fixa",
+   "Valor": 1800,
+   "Frequência": "Anual",
+   "Início": 46447,
+   "Reajusta?": "Sim",
+   "Dia do pagamento": 8
+  },
+  {
+   "Descrição": "Sem valor",
+   "Categoria": "Outros",
+   "Tipo": "Fixa",
+   "Valor": "",
+   "Frequência": "Mensal"
+  }
+ ],
+ "Despesas Ana": [
+  {
+   "Descrição": "Pilates",
+   "Categoria": "Saúde",
+   "Tipo": "Fixa",
+   "Valor": 280,
+   "Frequência": "Mensal",
+   "Reajusta?": "Sim",
+   "Cartão": "Itaú Ana"
+  },
+  {
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "Tipo": "Fixa",
+   "Valor": 580,
+   "Frequência": "Mensal",
+   "Reajusta?": "Sim",
+   "Dia do pagamento": 10
+  },
+  {
+   "Descrição": "Roupas",
+   "Categoria": "Compras",
+   "Tipo": "Variável",
+   "Valor": 250,
+   "Frequência": "Mensal",
+   "Reajusta?": "Sim",
+   "Cartão": "Itaú Ana"
+  },
+  {
+   "Descrição": "Curso anual",
+   "Categoria": "Educação",
+   "Tipo": "Fixa",
+   "Valor": 900,
+   "Frequência": "Anual",
+   "Reajusta?": "Não"
+  }
+ ],
+ "Despesas Casal": [
+  {
+   "Descrição": "Aluguel",
+   "Categoria": "Moradia",
+   "Tipo": "Fixa",
+   "Valor": 2100,
+   "Frequência": "Mensal",
+   "Reajusta?": "Sim",
+   "Pago por": "Bruno",
+   "Dia do pagamento": 10
+  },
+  {
+   "Descrição": "Condomínio",
+   "Categoria": "Moradia",
+   "Tipo": "Fixa",
+   "Valor": 480,
+   "Frequência": "Mensal",
+   "Reajusta?": "Sim",
+   "Pago por": "Ana",
+   "Dia do pagamento": 5
+  },
+  {
+   "Descrição": "Energia",
+   "Categoria": "Moradia",
+   "Tipo": "Variável",
+   "Valor": 230,
+   "Frequência": "Mensal",
+   "Reajusta?": "Sim",
+   "Pago por": "Bruno",
+   "Dia do pagamento": 18
+  },
+  {
+   "Descrição": "Mercado",
+   "Categoria": "Alimentação",
+   "Tipo": "Variável",
+   "Valor": 1400,
+   "Frequência": "Mensal",
+   "Reajusta?": "Sim",
+   "Pago por": "Conta conjunta"
+  },
+  {
+   "Descrição": "Restaurantes",
+   "Categoria": "Alimentação",
+   "Tipo": "Variável",
+   "Valor": 600,
+   "Frequência": "Mensal",
+   "Reajusta?": "Sim",
+   "Pago por": "Bruno",
+   "Cartão": "Nubank Bruno"
+  },
+  {
+   "Descrição": "Viagem",
+   "Categoria": "Lazer",
+   "Tipo": "Variável",
+   "Valor": 5000,
+   "Frequência": "Única",
+   "Início": 46569,
+   "Reajusta?": "Não",
+   "Pago por": "Conta conjunta"
+  },
+  {
+   "Descrição": "Streaming",
+   "Categoria": "Lazer",
+   "Tipo": "Fixa",
+   "Valor": 90,
+   "Frequência": "Mensal",
+   "Reajusta?": "Não",
+   "Pago por": "Ana",
+   "Cartão": "Cartão Fantasma"
+  }
+ ],
+ "Parcelas": [
+  {
+   "Descrição": "TV",
+   "Categoria": "Compras",
+   "De quem": "Bruno",
+   "Parcela": 336,
+   "Restantes": 6,
+   "Próxima": 46331,
+   "Cartão": "Nubank Bruno"
+  },
+  {
+   "Descrição": "Geladeira",
+   "Categoria": "Casa",
+   "De quem": "Casal",
+   "Parcela": 320,
+   "Restantes": 4,
+   "Próxima": 46275
+  },
+  {
+   "Descrição": "Notebook",
+   "Categoria": "Compras",
+   "De quem": "Ana",
+   "Parcela": 450,
+   "Restantes": 10,
+   "Próxima": 46341,
+   "Cartão": "Itaú Ana"
+  }
+ ],
+ "Investimentos": [
+  {
+   "Descrição": "Reserva",
+   "De quem": "Casal",
+   "Saldo atual": 12000,
+   "Aporte mensal": 800,
+   "Rentabilidade anual": 0.1
+  },
+  {
+   "Descrição": "Previdência",
+   "De quem": "Ana",
+   "Saldo atual": 6000,
+   "Aporte mensal": 300,
+   "Rentabilidade anual": 0.08
+  }
+ ],
+ "Cartões": [
+  {
+   "Cartão": "Nubank Bruno",
+   "De quem": "Bruno",
+   "Fechamento (dia)": 3,
+   "Vencimento (dia)": 10,
+   "Limite": 6000
+  },
+  {
+   "Cartão": "Itaú Ana",
+   "De quem": "Ana",
+   "Fechamento (dia)": 25,
+   "Vencimento (dia)": 5,
+   "Limite": 4000
+  }
+ ],
+ "Lançamentos": [
+  {
+   "Data": 46239,
+   "Descrição": "Salário",
+   "Categoria": "Salário",
+   "De quem": "Bruno",
+   "Tipo": "Receita",
+   "Valor": 3928.84
+  },
+  {
+   "Data": 46244,
+   "Descrição": "Aluguel",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 2100
+  },
+  {
+   "Data": 46268,
+   "Descrição": "Salário",
+   "Categoria": "Salário",
+   "De quem": "Ana",
+   "Tipo": "Receita",
+   "Valor": 6000
+  },
+  {
+   "Data": 46277,
+   "Descrição": "Mercado",
+   "Categoria": "Alimentação",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 1380.5
+  },
+  {
+   "Data": 46297,
+   "Descrição": "Farmácia",
+   "Categoria": "Saúde",
+   "De quem": "Ana",
+   "Tipo": "Despesa",
+   "Valor": 95.9
+  }
+ ]
+}

@@ -1,0 +1,1788 @@
+{
+ "Receitas Rodrigo": [
+  {
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "Valor": 8200,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 8200
+  },
+  {
+   "Descrição": "Freela (contrato)",
+   "Categoria": "Extra",
+   "Valor": 1200,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": 46539,
+   "Reajusta?": "Não",
+   "Mensal equiv.": 1200
+  },
+  {
+   "Descrição": "13º salário",
+   "Categoria": "Salário",
+   "Valor": 8200,
+   "Frequência": "Anual",
+   "Início": 46357,
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 683.333333333333
+  },
+  {
+   "Descrição": "1/3 de férias",
+   "Categoria": "Salário",
+   "Valor": 2733,
+   "Frequência": "Anual",
+   "Início": 46388,
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 227.75
+  },
+  {
+   "Descrição": "Restituição do IR",
+   "Categoria": "Extra",
+   "Valor": 1500,
+   "Frequência": "Única",
+   "Início": 46508,
+   "Fim": "",
+   "Reajusta?": "Não",
+   "Mensal equiv.": 0
+  }
+ ],
+ "Receitas Esposa": [
+  {
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "Valor": 5800,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 5800
+  },
+  {
+   "Descrição": "13º salário",
+   "Categoria": "Salário",
+   "Valor": 5800,
+   "Frequência": "Anual",
+   "Início": 46357,
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 483.333333333333
+  },
+  {
+   "Descrição": "1/3 de férias",
+   "Categoria": "Salário",
+   "Valor": 1933,
+   "Frequência": "Anual",
+   "Início": 46569,
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 161.083333333333
+  }
+ ],
+ "Despesas Rodrigo": [
+  {
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "Tipo": "Fixa",
+   "Valor": 60,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Não",
+   "Mensal equiv.": 60,
+   "Cartão": "Nubank Rodrigo"
+  },
+  {
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "Tipo": "Fixa",
+   "Valor": 650,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 650,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "Academia",
+   "Categoria": "Saúde",
+   "Tipo": "Fixa",
+   "Valor": 120,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 120,
+   "Cartão": "Nubank Rodrigo"
+  },
+  {
+   "Descrição": "Combustível",
+   "Categoria": "Transporte",
+   "Tipo": "Variável",
+   "Valor": 450,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 450,
+   "Cartão": "Nubank Rodrigo"
+  },
+  {
+   "Descrição": "Lazer pessoal",
+   "Categoria": "Lazer",
+   "Tipo": "Variável",
+   "Valor": 250,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 250,
+   "Cartão": "Nubank Rodrigo"
+  },
+  {
+   "Descrição": "Seguro do carro",
+   "Categoria": "Transporte",
+   "Tipo": "Fixa",
+   "Valor": 2400,
+   "Frequência": "Anual",
+   "Início": 46447,
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 200,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "IPVA",
+   "Categoria": "Transporte",
+   "Tipo": "Fixa",
+   "Valor": 1800,
+   "Frequência": "Anual",
+   "Início": 46388,
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 150,
+   "Cartão": ""
+  }
+ ],
+ "Despesas Esposa": [
+  {
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "Tipo": "Fixa",
+   "Valor": 55,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Não",
+   "Mensal equiv.": 55,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "Tipo": "Fixa",
+   "Valor": 580,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 580,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "Pilates",
+   "Categoria": "Saúde",
+   "Tipo": "Fixa",
+   "Valor": 280,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 280,
+   "Cartão": "Itaú Esposa"
+  },
+  {
+   "Descrição": "Transporte (app/ônibus)",
+   "Categoria": "Transporte",
+   "Tipo": "Variável",
+   "Valor": 300,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 300,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "Cuidados pessoais",
+   "Categoria": "Cuidados",
+   "Tipo": "Variável",
+   "Valor": 250,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 250,
+   "Cartão": "Itaú Esposa"
+  },
+  {
+   "Descrição": "Roupas",
+   "Categoria": "Compras",
+   "Tipo": "Variável",
+   "Valor": 200,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Mensal equiv.": 200,
+   "Cartão": "Itaú Esposa"
+  }
+ ],
+ "Despesas Casal": [
+  {
+   "Descrição": "Aluguel",
+   "Categoria": "Moradia",
+   "Tipo": "Fixa",
+   "Valor": 2100,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Pago por": "Rodrigo",
+   "Mensal equiv.": 2100,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "Condomínio",
+   "Categoria": "Moradia",
+   "Tipo": "Fixa",
+   "Valor": 480,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Pago por": "Esposa",
+   "Mensal equiv.": 480,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "Energia",
+   "Categoria": "Moradia",
+   "Tipo": "Variável",
+   "Valor": 260,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Pago por": "Rodrigo",
+   "Mensal equiv.": 260,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "Água e gás",
+   "Categoria": "Moradia",
+   "Tipo": "Variável",
+   "Valor": 140,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Pago por": "Esposa",
+   "Mensal equiv.": 140,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "Internet",
+   "Categoria": "Moradia",
+   "Tipo": "Fixa",
+   "Valor": 120,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Não",
+   "Pago por": "Esposa",
+   "Mensal equiv.": 120,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "Mercado",
+   "Categoria": "Alimentação",
+   "Tipo": "Variável",
+   "Valor": 1600,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Pago por": "Conta conjunta",
+   "Mensal equiv.": 1600,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "Restaurantes e delivery",
+   "Categoria": "Alimentação",
+   "Tipo": "Variável",
+   "Valor": 650,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Pago por": "Rodrigo",
+   "Mensal equiv.": 650,
+   "Cartão": "Nubank Rodrigo"
+  },
+  {
+   "Descrição": "Streaming",
+   "Categoria": "Lazer",
+   "Tipo": "Fixa",
+   "Valor": 90,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Não",
+   "Pago por": "Rodrigo",
+   "Mensal equiv.": 90,
+   "Cartão": "Nubank Rodrigo"
+  },
+  {
+   "Descrição": "Passeios juntos",
+   "Categoria": "Lazer",
+   "Tipo": "Variável",
+   "Valor": 400,
+   "Frequência": "Mensal",
+   "Início": "",
+   "Fim": "",
+   "Reajusta?": "Sim",
+   "Pago por": "Conta conjunta",
+   "Mensal equiv.": 400,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "Presentes de Natal",
+   "Categoria": "Lazer",
+   "Tipo": "Variável",
+   "Valor": 1200,
+   "Frequência": "Única",
+   "Início": 46357,
+   "Fim": "",
+   "Reajusta?": "Não",
+   "Pago por": "Conta conjunta",
+   "Mensal equiv.": 0,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "Viagem de férias",
+   "Categoria": "Lazer",
+   "Tipo": "Variável",
+   "Valor": 6000,
+   "Frequência": "Única",
+   "Início": 46569,
+   "Fim": "",
+   "Reajusta?": "Não",
+   "Pago por": "Conta conjunta",
+   "Mensal equiv.": 0,
+   "Cartão": ""
+  }
+ ],
+ "Parcelas": [
+  {
+   "Descrição": "Notebook",
+   "Categoria": "Compras",
+   "De quem": "Rodrigo",
+   "Parcela": 450,
+   "Restantes": 7,
+   "Próxima": 46331,
+   "Total restante": 3150,
+   "Última parcela": 46512,
+   "Cartão": "Nubank Rodrigo"
+  },
+  {
+   "Descrição": "Geladeira",
+   "Categoria": "Casa",
+   "De quem": "Casal",
+   "Parcela": 320,
+   "Restantes": 3,
+   "Próxima": 46336,
+   "Total restante": 960,
+   "Última parcela": 46397,
+   "Cartão": ""
+  },
+  {
+   "Descrição": "Curso de inglês",
+   "Categoria": "Educação",
+   "De quem": "Esposa",
+   "Parcela": 280,
+   "Restantes": 10,
+   "Próxima": 46341,
+   "Total restante": 2800,
+   "Última parcela": 46614,
+   "Cartão": "Itaú Esposa"
+  }
+ ],
+ "Investimentos": [
+  {
+   "Descrição": "Reserva de emergência",
+   "De quem": "Casal",
+   "Saldo atual": 15000,
+   "Aporte mensal": 1000,
+   "Rentabilidade anual": 0.1
+  },
+  {
+   "Descrição": "Longo prazo",
+   "De quem": "Rodrigo",
+   "Saldo atual": 8000,
+   "Aporte mensal": 300,
+   "Rentabilidade anual": 0.08
+  },
+  {
+   "Descrição": "Previdência",
+   "De quem": "Esposa",
+   "Saldo atual": 6000,
+   "Aporte mensal": 300,
+   "Rentabilidade anual": 0.08
+  }
+ ],
+ "Cartões": [
+  {
+   "Cartão": "Nubank Rodrigo",
+   "De quem": "Rodrigo",
+   "Fechamento (dia)": 3,
+   "Vencimento (dia)": 10,
+   "Limite": 8000,
+   "Vazio na coluna 'Cartão' das despesas = Pix, débito ou boleto. No cartão, o gasto entra na fatura do mês seguinte.": ""
+  },
+  {
+   "Cartão": "Itaú Esposa",
+   "De quem": "Esposa",
+   "Fechamento (dia)": 25,
+   "Vencimento (dia)": 5,
+   "Limite": 5000,
+   "Vazio na coluna 'Cartão' das despesas = Pix, débito ou boleto. No cartão, o gasto entra na fatura do mês seguinte.": ""
+  }
+ ],
+ "Premissas": [
+  {
+   "Chave": "pessoa_1",
+   "Parâmetro": "Nome da pessoa 1",
+   "Valor": "Rodrigo",
+   "Observação": "Igual ao final do nome das abas 'Receitas …' e 'Despesas …'."
+  },
+  {
+   "Chave": "pessoa_2",
+   "Parâmetro": "Nome da pessoa 2",
+   "Valor": "Esposa",
+   "Observação": "Troque pelo nome dela e renomeie as abas dela igual."
+  },
+  {
+   "Chave": "divisao_casal",
+   "Parâmetro": "Como dividir as despesas do casal",
+   "Valor": "Proporcional à renda",
+   "Observação": "Proporcional à renda / Igual (50/50) / Percentual fixo."
+  },
+  {
+   "Chave": "percentual_pessoa_1",
+   "Parâmetro": "Parte da pessoa 1 (se Percentual fixo)",
+   "Valor": 0.6,
+   "Observação": "Só vale com 'Percentual fixo'. A pessoa 2 fica com o restante."
+  },
+  {
+   "Chave": "saldo_conta",
+   "Parâmetro": "Saldo em conta hoje (somando os dois)",
+   "Valor": 4500,
+   "Observação": "Dinheiro parado em conta corrente, fora dos investimentos."
+  },
+  {
+   "Chave": "inflacao",
+   "Parâmetro": "Inflação anual esperada",
+   "Valor": 0.045,
+   "Observação": "Exemplo. Corrige despesas com 'Reajusta? = Sim'."
+  },
+  {
+   "Chave": "reajuste_salarial",
+   "Parâmetro": "Reajuste salarial anual",
+   "Valor": 0.05,
+   "Observação": "Exemplo. Aplica nas receitas com 'Reajusta? = Sim'."
+  },
+  {
+   "Chave": "mes_reajuste",
+   "Parâmetro": "Mês do reajuste salarial (1 a 12)",
+   "Valor": 5,
+   "Observação": "Ex.: 5 = maio."
+  },
+  {
+   "Chave": "meses_projecao",
+   "Parâmetro": "Meses de projeção",
+   "Valor": 24,
+   "Observação": "Quantos meses à frente o painel projeta."
+  },
+  {
+   "Chave": "meta_reserva_meses",
+   "Parâmetro": "Meta de reserva (meses de despesa)",
+   "Valor": 6,
+   "Observação": "Indicador de reserva de emergência."
+  },
+  {
+   "Chave": "otimista_variaveis",
+   "Parâmetro": "Otimista: ajuste nas despesas variáveis",
+   "Valor": -0.05,
+   "Observação": "-5% = gastar 5% menos nas variáveis."
+  },
+  {
+   "Chave": "otimista_inflacao",
+   "Parâmetro": "Otimista: ajuste na inflação (p.p.)",
+   "Valor": -0.01,
+   "Observação": "-1 p.p. sobre a inflação esperada."
+  },
+  {
+   "Chave": "pessimista_variaveis",
+   "Parâmetro": "Pessimista: ajuste nas despesas variáveis",
+   "Valor": 0.15,
+   "Observação": "+15% nas variáveis."
+  },
+  {
+   "Chave": "pessimista_inflacao",
+   "Parâmetro": "Pessimista: ajuste na inflação (p.p.)",
+   "Valor": 0.02,
+   "Observação": "+2 p.p. sobre a inflação esperada."
+  }
+ ],
+ "Lançamentos": [
+  {
+   "Data": 46144,
+   "Descrição": "Pilates",
+   "Categoria": "Saúde",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 280
+  },
+  {
+   "Data": 46144,
+   "Descrição": "Energia",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 299.19
+  },
+  {
+   "Data": 46144,
+   "Descrição": "Restaurantes e delivery",
+   "Categoria": "Alimentação",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 683.05
+  },
+  {
+   "Data": 46144,
+   "Descrição": "Passeios juntos",
+   "Categoria": "Lazer",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 484.2
+  },
+  {
+   "Data": 46145,
+   "Descrição": "Cuidados pessoais",
+   "Categoria": "Cuidados",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 248.36
+  },
+  {
+   "Data": 46145,
+   "Descrição": "Roupas",
+   "Categoria": "Compras",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 183.25
+  },
+  {
+   "Data": 46146,
+   "Descrição": "Água e gás",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 167.86
+  },
+  {
+   "Data": 46147,
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "De quem": "Rodrigo",
+   "Tipo": "Receita",
+   "Valor": 8200
+  },
+  {
+   "Data": 46147,
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "De quem": "Esposa",
+   "Tipo": "Receita",
+   "Valor": 5800
+  },
+  {
+   "Data": 46147,
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 650
+  },
+  {
+   "Data": 46147,
+   "Descrição": "Notebook (parcela)",
+   "Categoria": "Compras",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 450
+  },
+  {
+   "Data": 46152,
+   "Descrição": "Geladeira (parcela)",
+   "Categoria": "Casa",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 320
+  },
+  {
+   "Data": 46153,
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 60
+  },
+  {
+   "Data": 46154,
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 55
+  },
+  {
+   "Data": 46155,
+   "Descrição": "Academia",
+   "Categoria": "Saúde",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 120
+  },
+  {
+   "Data": 46155,
+   "Descrição": "Streaming",
+   "Categoria": "Lazer",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 90
+  },
+  {
+   "Data": 46156,
+   "Descrição": "Condomínio",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 480
+  },
+  {
+   "Data": 46157,
+   "Descrição": "Curso de inglês (parcela)",
+   "Categoria": "Educação",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 280
+  },
+  {
+   "Data": 46159,
+   "Descrição": "Transporte (app/ônibus)",
+   "Categoria": "Transporte",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 271.76
+  },
+  {
+   "Data": 46160,
+   "Descrição": "Aluguel",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 2100
+  },
+  {
+   "Data": 46161,
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 580
+  },
+  {
+   "Data": 46163,
+   "Descrição": "Combustível",
+   "Categoria": "Transporte",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 377.69
+  },
+  {
+   "Data": 46163,
+   "Descrição": "Internet",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 120
+  },
+  {
+   "Data": 46163,
+   "Descrição": "Mercado",
+   "Categoria": "Alimentação",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 1685.12
+  },
+  {
+   "Data": 46169,
+   "Descrição": "Lazer pessoal",
+   "Categoria": "Lazer",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 258.59
+  },
+  {
+   "Data": 46175,
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 60
+  },
+  {
+   "Data": 46175,
+   "Descrição": "Água e gás",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 149.46
+  },
+  {
+   "Data": 46177,
+   "Descrição": "Cuidados pessoais",
+   "Categoria": "Cuidados",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 263.16
+  },
+  {
+   "Data": 46177,
+   "Descrição": "Aluguel",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 2100
+  },
+  {
+   "Data": 46178,
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "De quem": "Rodrigo",
+   "Tipo": "Receita",
+   "Valor": 8200
+  },
+  {
+   "Data": 46178,
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "De quem": "Esposa",
+   "Tipo": "Receita",
+   "Valor": 5800
+  },
+  {
+   "Data": 46178,
+   "Descrição": "Combustível",
+   "Categoria": "Transporte",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 421.13
+  },
+  {
+   "Data": 46178,
+   "Descrição": "Lazer pessoal",
+   "Categoria": "Lazer",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 259.07
+  },
+  {
+   "Data": 46178,
+   "Descrição": "Notebook (parcela)",
+   "Categoria": "Compras",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 450
+  },
+  {
+   "Data": 46183,
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 580
+  },
+  {
+   "Data": 46183,
+   "Descrição": "Geladeira (parcela)",
+   "Categoria": "Casa",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 320
+  },
+  {
+   "Data": 46188,
+   "Descrição": "Passeios juntos",
+   "Categoria": "Lazer",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 385.85
+  },
+  {
+   "Data": 46188,
+   "Descrição": "Curso de inglês (parcela)",
+   "Categoria": "Educação",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 280
+  },
+  {
+   "Data": 46189,
+   "Descrição": "Internet",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 120
+  },
+  {
+   "Data": 46191,
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 650
+  },
+  {
+   "Data": 46191,
+   "Descrição": "Pilates",
+   "Categoria": "Saúde",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 280
+  },
+  {
+   "Data": 46191,
+   "Descrição": "Condomínio",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 480
+  },
+  {
+   "Data": 46192,
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 55
+  },
+  {
+   "Data": 46192,
+   "Descrição": "Streaming",
+   "Categoria": "Lazer",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 90
+  },
+  {
+   "Data": 46194,
+   "Descrição": "Roupas",
+   "Categoria": "Compras",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 179.03
+  },
+  {
+   "Data": 46195,
+   "Descrição": "Mercado",
+   "Categoria": "Alimentação",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 1652.3
+  },
+  {
+   "Data": 46196,
+   "Descrição": "Energia",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 219.73
+  },
+  {
+   "Data": 46198,
+   "Descrição": "Restaurantes e delivery",
+   "Categoria": "Alimentação",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 614.68
+  },
+  {
+   "Data": 46200,
+   "Descrição": "Transporte (app/ônibus)",
+   "Categoria": "Transporte",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 327.84
+  },
+  {
+   "Data": 46201,
+   "Descrição": "Academia",
+   "Categoria": "Saúde",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 120
+  },
+  {
+   "Data": 46206,
+   "Descrição": "Lazer pessoal",
+   "Categoria": "Lazer",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 262.44
+  },
+  {
+   "Data": 46206,
+   "Descrição": "Mercado",
+   "Categoria": "Alimentação",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 1801.33
+  },
+  {
+   "Data": 46207,
+   "Descrição": "Roupas",
+   "Categoria": "Compras",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 204.95
+  },
+  {
+   "Data": 46208,
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "De quem": "Rodrigo",
+   "Tipo": "Receita",
+   "Valor": 8200
+  },
+  {
+   "Data": 46208,
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "De quem": "Esposa",
+   "Tipo": "Receita",
+   "Valor": 5800
+  },
+  {
+   "Data": 46208,
+   "Descrição": "Notebook (parcela)",
+   "Categoria": "Compras",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 450
+  },
+  {
+   "Data": 46209,
+   "Descrição": "Academia",
+   "Categoria": "Saúde",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 120
+  },
+  {
+   "Data": 46209,
+   "Descrição": "Aluguel",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 2100
+  },
+  {
+   "Data": 46211,
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 60
+  },
+  {
+   "Data": 46213,
+   "Descrição": "Geladeira (parcela)",
+   "Categoria": "Casa",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 320
+  },
+  {
+   "Data": 46214,
+   "Descrição": "Pilates",
+   "Categoria": "Saúde",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 280
+  },
+  {
+   "Data": 46214,
+   "Descrição": "Energia",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 229.01
+  },
+  {
+   "Data": 46214,
+   "Descrição": "Passeios juntos",
+   "Categoria": "Lazer",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 382.42
+  },
+  {
+   "Data": 46218,
+   "Descrição": "Freela (contrato)",
+   "Categoria": "Extra",
+   "De quem": "Rodrigo",
+   "Tipo": "Receita",
+   "Valor": 1200
+  },
+  {
+   "Data": 46218,
+   "Descrição": "Curso de inglês (parcela)",
+   "Categoria": "Educação",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 280
+  },
+  {
+   "Data": 46219,
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 580
+  },
+  {
+   "Data": 46219,
+   "Descrição": "Água e gás",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 138.42
+  },
+  {
+   "Data": 46220,
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 55
+  },
+  {
+   "Data": 46222,
+   "Descrição": "Restaurantes e delivery",
+   "Categoria": "Alimentação",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 738.16
+  },
+  {
+   "Data": 46223,
+   "Descrição": "Cuidados pessoais",
+   "Categoria": "Cuidados",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 303.02
+  },
+  {
+   "Data": 46225,
+   "Descrição": "Internet",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 120
+  },
+  {
+   "Data": 46226,
+   "Descrição": "Combustível",
+   "Categoria": "Transporte",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 509.37
+  },
+  {
+   "Data": 46227,
+   "Descrição": "Transporte (app/ônibus)",
+   "Categoria": "Transporte",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 299.86
+  },
+  {
+   "Data": 46228,
+   "Descrição": "Condomínio",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 480
+  },
+  {
+   "Data": 46229,
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 650
+  },
+  {
+   "Data": 46230,
+   "Descrição": "Streaming",
+   "Categoria": "Lazer",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 90
+  },
+  {
+   "Data": 46235,
+   "Descrição": "Mercado",
+   "Categoria": "Alimentação",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 1914.02
+  },
+  {
+   "Data": 46237,
+   "Descrição": "Lazer pessoal",
+   "Categoria": "Lazer",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 289
+  },
+  {
+   "Data": 46238,
+   "Descrição": "Streaming",
+   "Categoria": "Lazer",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 90
+  },
+  {
+   "Data": 46239,
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "De quem": "Rodrigo",
+   "Tipo": "Receita",
+   "Valor": 8200
+  },
+  {
+   "Data": 46239,
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "De quem": "Esposa",
+   "Tipo": "Receita",
+   "Valor": 5800
+  },
+  {
+   "Data": 46239,
+   "Descrição": "Notebook (parcela)",
+   "Categoria": "Compras",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 450
+  },
+  {
+   "Data": 46243,
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 55
+  },
+  {
+   "Data": 46244,
+   "Descrição": "Geladeira (parcela)",
+   "Categoria": "Casa",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 320
+  },
+  {
+   "Data": 46246,
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 60
+  },
+  {
+   "Data": 46246,
+   "Descrição": "Internet",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 120
+  },
+  {
+   "Data": 46246,
+   "Descrição": "Restaurantes e delivery",
+   "Categoria": "Alimentação",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 576.69
+  },
+  {
+   "Data": 46247,
+   "Descrição": "Água e gás",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 164.47
+  },
+  {
+   "Data": 46249,
+   "Descrição": "Freela (contrato)",
+   "Categoria": "Extra",
+   "De quem": "Rodrigo",
+   "Tipo": "Receita",
+   "Valor": 1200
+  },
+  {
+   "Data": 46249,
+   "Descrição": "Energia",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 242.8
+  },
+  {
+   "Data": 46249,
+   "Descrição": "Curso de inglês (parcela)",
+   "Categoria": "Educação",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 280
+  },
+  {
+   "Data": 46250,
+   "Descrição": "Academia",
+   "Categoria": "Saúde",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 120
+  },
+  {
+   "Data": 46250,
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 580
+  },
+  {
+   "Data": 46250,
+   "Descrição": "Passeios juntos",
+   "Categoria": "Lazer",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 337.43
+  },
+  {
+   "Data": 46253,
+   "Descrição": "Combustível",
+   "Categoria": "Transporte",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 512.44
+  },
+  {
+   "Data": 46254,
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 650
+  },
+  {
+   "Data": 46255,
+   "Descrição": "Roupas",
+   "Categoria": "Compras",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 210.24
+  },
+  {
+   "Data": 46256,
+   "Descrição": "Transporte (app/ônibus)",
+   "Categoria": "Transporte",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 253.8
+  },
+  {
+   "Data": 46256,
+   "Descrição": "Aluguel",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 2100
+  },
+  {
+   "Data": 46257,
+   "Descrição": "Pilates",
+   "Categoria": "Saúde",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 280
+  },
+  {
+   "Data": 46258,
+   "Descrição": "Cuidados pessoais",
+   "Categoria": "Cuidados",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 275.15
+  },
+  {
+   "Data": 46261,
+   "Descrição": "Condomínio",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 480
+  },
+  {
+   "Data": 46268,
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 580
+  },
+  {
+   "Data": 46270,
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "De quem": "Rodrigo",
+   "Tipo": "Receita",
+   "Valor": 8200
+  },
+  {
+   "Data": 46270,
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "De quem": "Esposa",
+   "Tipo": "Receita",
+   "Valor": 5800
+  },
+  {
+   "Data": 46270,
+   "Descrição": "Academia",
+   "Categoria": "Saúde",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 120
+  },
+  {
+   "Data": 46270,
+   "Descrição": "Notebook (parcela)",
+   "Categoria": "Compras",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 450
+  },
+  {
+   "Data": 46271,
+   "Descrição": "Pilates",
+   "Categoria": "Saúde",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 280
+  },
+  {
+   "Data": 46271,
+   "Descrição": "Restaurantes e delivery",
+   "Categoria": "Alimentação",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 572.34
+  },
+  {
+   "Data": 46273,
+   "Descrição": "Mercado",
+   "Categoria": "Alimentação",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 1408.59
+  },
+  {
+   "Data": 46273,
+   "Descrição": "Passeios juntos",
+   "Categoria": "Lazer",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 329.93
+  },
+  {
+   "Data": 46274,
+   "Descrição": "Cuidados pessoais",
+   "Categoria": "Cuidados",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 293.34
+  },
+  {
+   "Data": 46274,
+   "Descrição": "Condomínio",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 480
+  },
+  {
+   "Data": 46275,
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 650
+  },
+  {
+   "Data": 46275,
+   "Descrição": "Geladeira (parcela)",
+   "Categoria": "Casa",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 320
+  },
+  {
+   "Data": 46277,
+   "Descrição": "Água e gás",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 153.03
+  },
+  {
+   "Data": 46278,
+   "Descrição": "Lazer pessoal",
+   "Categoria": "Lazer",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 296.68
+  },
+  {
+   "Data": 46278,
+   "Descrição": "Internet",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 120
+  },
+  {
+   "Data": 46280,
+   "Descrição": "Freela (contrato)",
+   "Categoria": "Extra",
+   "De quem": "Rodrigo",
+   "Tipo": "Receita",
+   "Valor": 1200
+  },
+  {
+   "Data": 46280,
+   "Descrição": "Transporte (app/ônibus)",
+   "Categoria": "Transporte",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 294.2
+  },
+  {
+   "Data": 46280,
+   "Descrição": "Curso de inglês (parcela)",
+   "Categoria": "Educação",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 280
+  },
+  {
+   "Data": 46281,
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 55
+  },
+  {
+   "Data": 46283,
+   "Descrição": "Aluguel",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 2100
+  },
+  {
+   "Data": 46287,
+   "Descrição": "Streaming",
+   "Categoria": "Lazer",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 90
+  },
+  {
+   "Data": 46288,
+   "Descrição": "Energia",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 256.39
+  },
+  {
+   "Data": 46289,
+   "Descrição": "Combustível",
+   "Categoria": "Transporte",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 413.57
+  },
+  {
+   "Data": 46290,
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 60
+  },
+  {
+   "Data": 46292,
+   "Descrição": "Roupas",
+   "Categoria": "Compras",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 198.44
+  },
+  {
+   "Data": 46297,
+   "Descrição": "Roupas",
+   "Categoria": "Compras",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 200.53
+  },
+  {
+   "Data": 46297,
+   "Descrição": "Mercado",
+   "Categoria": "Alimentação",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 1433.99
+  },
+  {
+   "Data": 46299,
+   "Descrição": "Água e gás",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 141.77
+  },
+  {
+   "Data": 46299,
+   "Descrição": "Streaming",
+   "Categoria": "Lazer",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 90
+  },
+  {
+   "Data": 46300,
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "De quem": "Rodrigo",
+   "Tipo": "Receita",
+   "Valor": 8200
+  },
+  {
+   "Data": 46300,
+   "Descrição": "Salário líquido",
+   "Categoria": "Salário",
+   "De quem": "Esposa",
+   "Tipo": "Receita",
+   "Valor": 5800
+  },
+  {
+   "Data": 46300,
+   "Descrição": "Transporte (app/ônibus)",
+   "Categoria": "Transporte",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 328.86
+  },
+  {
+   "Data": 46300,
+   "Descrição": "Notebook (parcela)",
+   "Categoria": "Compras",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 450
+  },
+  {
+   "Data": 46301,
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 650
+  },
+  {
+   "Data": 46302,
+   "Descrição": "Restaurantes e delivery",
+   "Categoria": "Alimentação",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 647.56
+  },
+  {
+   "Data": 46304,
+   "Descrição": "Academia",
+   "Categoria": "Saúde",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 120
+  },
+  {
+   "Data": 46305,
+   "Descrição": "Combustível",
+   "Categoria": "Transporte",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 369.74
+  },
+  {
+   "Data": 46305,
+   "Descrição": "Geladeira (parcela)",
+   "Categoria": "Casa",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 320
+  },
+  {
+   "Data": 46306,
+   "Descrição": "Pilates",
+   "Categoria": "Saúde",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 280
+  },
+  {
+   "Data": 46306,
+   "Descrição": "Passeios juntos",
+   "Categoria": "Lazer",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 424.12
+  },
+  {
+   "Data": 46308,
+   "Descrição": "Condomínio",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 480
+  },
+  {
+   "Data": 46308,
+   "Descrição": "Energia",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 254.69
+  },
+  {
+   "Data": 46308,
+   "Descrição": "Internet",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 120
+  },
+  {
+   "Data": 46309,
+   "Descrição": "Lazer pessoal",
+   "Categoria": "Lazer",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 258.46
+  },
+  {
+   "Data": 46310,
+   "Descrição": "Freela (contrato)",
+   "Categoria": "Extra",
+   "De quem": "Rodrigo",
+   "Tipo": "Receita",
+   "Valor": 1200
+  },
+  {
+   "Data": 46310,
+   "Descrição": "Curso de inglês (parcela)",
+   "Categoria": "Educação",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 280
+  },
+  {
+   "Data": 46312,
+   "Descrição": "Cuidados pessoais",
+   "Categoria": "Cuidados",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 300.02
+  },
+  {
+   "Data": 46313,
+   "Descrição": "Aluguel",
+   "Categoria": "Moradia",
+   "De quem": "Casal",
+   "Tipo": "Despesa",
+   "Valor": 2100
+  },
+  {
+   "Data": 46314,
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "De quem": "Rodrigo",
+   "Tipo": "Despesa",
+   "Valor": 60
+  },
+  {
+   "Data": 46314,
+   "Descrição": "Plano de saúde",
+   "Categoria": "Saúde",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 580
+  },
+  {
+   "Data": 46315,
+   "Descrição": "Celular",
+   "Categoria": "Serviços",
+   "De quem": "Esposa",
+   "Tipo": "Despesa",
+   "Valor": 55
+  }
+ ],
+ "_planilha": "Modelo"
+}
