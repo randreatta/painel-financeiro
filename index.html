@@ -149,6 +149,18 @@ details summary { cursor: pointer; font-weight: 600; font-size: 15px; }
 .ccard li { display: flex; justify-content: space-between; gap: 10px; padding: 3px 0; border-top: 1px solid var(--border); font-variant-numeric: tabular-nums; }
 .ccard li:first-child { border-top: 0; }
 .ccard li span:first-child { color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cal-sum { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0 0 12px; font-variant-numeric: tabular-nums; }
+.cal-sum div > span { display: block; color: var(--muted); font-size: 12px; }
+.cal-sum div b { font-size: 17px; font-weight: 650; }
+.cal-grid { display: grid; grid-template-columns: 7fr 5fr; gap: 20px; align-items: start; }
+@media (max-width: 980px) { .cal-grid { grid-template-columns: 1fr; } }
+.cal-list { list-style: none; margin: 0; padding: 0; max-height: 340px; overflow: auto; font-size: 13px; }
+.cal-list li.day { color: var(--ink-2); font-weight: 600; font-size: 12.5px; padding: 10px 0 4px; border-top: 1px solid var(--border); }
+.cal-list li.day:first-child { border-top: 0; padding-top: 0; }
+.cal-list li.it { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; font-variant-numeric: tabular-nums; }
+.cal-list li.it span:first-child { color: var(--ink-2); }
+.cal-list li.it small { color: var(--muted); }
+.cal-list li.low { color: var(--critical); font-size: 12px; padding: 2px 0 0; }
 .sub-h { font-size: 13.5px; margin: 0 0 6px; }
 .login { max-width: 440px; margin: 72px auto; text-align: center; padding: 32px 28px; }
 .login h2 { font-size: 20px; margin: 0 0 6px; }
@@ -274,6 +286,21 @@ details summary { cursor: pointer; font-weight: 600; font-size: 15px; }
       <ul class="events" id="events"></ul>
     </section>
 
+    <section class="card span-12" id="calCard">
+      <div class="card-head">
+        <div>
+          <h2>Calendário do mês</h2>
+          <p class="desc" id="calDesc">Saldo em conta dia a dia: quando cada salário entra e cada conta sai.</p>
+        </div>
+        <select id="calSel" aria-label="Mês do calendário"></select>
+      </div>
+      <div class="cal-sum" id="calSum"></div>
+      <div class="cal-grid">
+        <div class="chart" id="chCal"></div>
+        <ul class="cal-list" id="calList"></ul>
+      </div>
+    </section>
+
     <section class="card span-12 hidden" id="cardsCard">
       <div class="card-head">
         <div>
@@ -374,6 +401,7 @@ function normalizeData(raw) {
     otVar: pc('otimistavariaveis', -0.05), otInf: pc('otimistainflacao', -0.01),
     peVar: pc('pessimistavariaveis', 0.15), peInf: pc('pessimistainflacao', 0.02),
     divisao: norm(pr['divisaocasal'] || 'proporcional'),
+    sabadoUtil: !norm(pr['sabadodiautil'] || 'sim').startsWith('n'),
     pct1: pc('percentualpessoa1', 0.5),
   };
 
@@ -422,6 +450,10 @@ function normalizeData(raw) {
       fim: parseDate(pick(r, 'fim')),
       reaj: norm(pick(r, 'reajusta', 'reajuste', 'corrigeinflacao')).startsWith('s'),
       folha: !isExp && norm(pick(r, 'descontainss', 'descontairrf', 'clt')).startsWith('s'),   // bruto CLT: desconta INSS e verifica IRRF
+      pag: isExp ? null : String(pick(r, 'pagamentodia', 'diadopagamento', 'pagamento') || '').trim(),   // "5º dia útil", "10"…
+      adPct: isExp ? 0 : (pctVal(pick(r, 'adiantamento', 'adiantamentopct')) || 0),
+      adDia: isExp ? NaN : parseNum(pick(r, 'diadoadiantamento')),
+      dia: isExp ? Math.round(parseNum(pick(r, 'diadopagamento', 'vencimentodia', 'vencimento'))) : NaN,
       tipo: isExp ? (norm(pick(r, 'tipo')).startsWith('v') ? 'variavel' : 'fixa') : null,
       own: s.own,
       cartao: cardOf(pick(r, 'cartao', 'pagamento', 'formadepagamento')),
@@ -467,6 +499,8 @@ function normalizeData(raw) {
   })).filter(o => o.data && !isNaN(o.valor) && o.valor > 0);
 
   const receitas = flows('receitas'), despesas = flows('despesas');
+  const pagPadrao = {};   // receita sem dia (13º, férias…) cai no dia do salário da mesma pessoa
+  receitas.forEach(it => { if (it.pag && !pagPadrao[it.own]) pagPadrao[it.own] = it.pag; });
 
   // ---- IRRF (aba Tabela IRRF + linhas irrf_* da Premissas; padrão = tabela 2026, Lei 15.270/2025)
   let faixas = sheetRows(raw, 'Tabela IRRF').map(r => ({
@@ -494,7 +528,42 @@ function normalizeData(raw) {
   else if (prem.divisao.startsWith('percentual') || prem.divisao.startsWith('fixo')) { share1 = Math.min(1, Math.max(0, prem.pct1)); shareLabel = 'por percentual fixo'; }
   else { share1 = inc.p1 + inc.p2 > 0 ? inc.p1 / (inc.p1 + inc.p2) : 0.5; shareLabel = 'de forma proporcional à renda'; }
 
-  return { receitas, despesas, parcelas, invest, prem, lanc, warnings, start, names, share1, shareLabel, inc, cartoes, irrf };
+  return { receitas, despesas, parcelas, invest, prem, lanc, warnings, start, names, share1, shareLabel, inc, cartoes, irrf, pagPadrao };
+}
+
+/* ---- Calendário: dias úteis (sem domingo, sem feriado nacional; sábado conforme Premissas) ---- */
+const mlen = i => new Date(Math.floor(i / 12), i % 12 + 1, 0).getDate();
+const _fer = {};
+function feriados(y) {
+  if (_fer[y]) return _fer[y];
+  const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25),
+    g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30, k = Math.floor(c / 4), l = c % 4,
+    L = (32 + 2 * e + 2 * k - h - l) % 7, m = Math.floor((a + 11 * h + 22 * L) / 451),
+    mes = Math.floor((h + L - 7 * m + 114) / 31), dia = ((h + L - 7 * m + 114) % 31) + 1;
+  const sexta = new Date(y, mes - 1, dia - 2);   // Sexta-feira Santa
+  const set = new Set(['1-1', '4-21', '5-1', '9-7', '10-12', '11-2', '11-15', '11-20', '12-25', `${sexta.getMonth() + 1}-${sexta.getDate()}`]);
+  return (_fer[y] = set);
+}
+function diaUtil(D, i, d, sabadoConta) {
+  const y = Math.floor(i / 12), mo = i % 12, wd = new Date(y, mo, d).getDay();
+  if (wd === 0 || (wd === 6 && !sabadoConta)) return false;
+  return !feriados(y).has(`${mo + 1}-${d}`);
+}
+/* Dia em que um pagamento cai no mês i: "5º dia útil", "último dia útil" ou um dia fixo
+   (dia fixo em fim de semana/feriado é antecipado para o dia útil anterior). */
+function payDay(D, spec, i) {
+  const n = mlen(i), s = norm(spec);
+  const m = s.match(/^(\d+)diautil$/);
+  if (m) {   // o sábado conta no prazo (regra da CLT), mas se o prazo cair num sábado o crédito vem no dia útil anterior
+    let k = 0, d = 1;
+    for (; d <= n; d++) if (diaUtil(D, i, d, D.prem.sabadoUtil) && ++k === +m[1]) break;
+    d = Math.min(d, n); while (d > 1 && !diaUtil(D, i, d, false)) d--;
+    return d;
+  }
+  if (s.startsWith('ultimodiautil')) { for (let d = n; d >= 1; d--) if (diaUtil(D, i, d, false)) return d; return n; }
+  const fixo = Math.round(parseNum(spec));
+  if (fixo > 0) { let d = Math.min(fixo, n); while (d > 1 && !diaUtil(D, i, d, false)) d--; return d; }
+  return 1;
 }
 
 /* INSS do empregado: progressivo, cada alíquota só sobre a parte do salário dentro da faixa (teto = último "Até"). */
@@ -545,12 +614,18 @@ function project(D, scen, N, who = 'casal') {
     const i = D.start + m;
     if (m > 0 && p.mesReajuste >= 1 && (i % 12) + 1 === p.mesReajuste) reajN++;
     const fInc = Math.pow(1 + p.reajuste, reajN), fExp = Math.pow(1 + infl, m / 12);
-    const r = { i, rec: 0, desp: 0, fixas: 0, variaveis: 0, despProprias: 0, despCasal: 0, parc: 0, aportes: 0, cartao: 0, inss: 0, irrf: 0, recBruta: 0, cats: {}, recItems: [], expItems: [], casalItems: [], faturas: {} };
+    const r = { i, rec: 0, desp: 0, fixas: 0, variaveis: 0, despProprias: 0, despCasal: 0, parc: 0, aportes: 0, cartao: 0, inss: 0, irrf: 0, recBruta: 0, cats: {}, recItems: [], expItems: [], casalItems: [], faturas: {}, ev: [], fatW: {} };
     const fat = (nome, item) => { const f = r.faturas[nome] = r.faturas[nome] || { total: 0, items: [] }; f.total += item.v; f.items.push(item); };
     for (const it of D.receitas) { const w = W(it.own); if (w && occurs(it, i)) {
       const bruto = it.valor * (it.reaj ? fInc : 1), fo = it.folha ? folhaOf(D.irrf, bruto) : { inss: 0, irrf: 0, total: 0 };
       const v = (bruto - fo.total) * w; r.rec += v; r.recBruta += bruto * w; r.inss += fo.inss * w; r.irrf += fo.irrf * w;
       if (it.freq !== 'mensal') r.recItems.push({ ...it, v });
+      const pag = it.pag || D.pagPadrao[it.own] || '';
+      if (it.adPct > 0 && it.adDia > 0) {          // adiantamento = % do bruto; o saldo já vem sem INSS/IRRF
+        const adv = Math.min(v, bruto * it.adPct * w);
+        r.ev.push({ dia: payDay(D, it.adDia, i), desc: `${it.desc} (adiantamento)`, own: it.own, v: adv });
+        r.ev.push({ dia: payDay(D, pag, i), desc: `${it.desc} (saldo)`, own: it.own, v: v - adv });
+      } else r.ev.push({ dia: payDay(D, pag, i), desc: it.desc, own: it.own, v });
     } }
     for (const it of D.despesas) { if (!occurs(it, it.cartao ? i - 1 : i)) continue;   // cartão: paga na fatura do mês seguinte
       const full = it.valor * (it.reaj ? fExp : 1) * (it.tipo === 'variavel' ? 1 + varAdj : 1);
@@ -558,7 +633,9 @@ function project(D, scen, N, who = 'casal') {
       if (it.own === 'casal') r.casalItems.push({ ...it, v: full });
       const w = W(it.own); if (!w) continue;
       const v = full * w;
-      if (it.cartao) r.cartao += v;
+      if (it.cartao) { r.cartao += v; r.fatW[it.cartao] = (r.fatW[it.cartao] || 0) + v; }
+      else r.ev.push({ dia: it.dia > 0 ? Math.min(it.dia, mlen(i)) : null, desc: it.desc, own: it.own, v: -v,
+        pago: it.own === 'casal' ? it.pago : null });
       r.desp += v; r[it.tipo === 'variavel' ? 'variaveis' : 'fixas'] += v;
       r[it.own === 'casal' && who !== 'casal' ? 'despCasal' : 'despProprias'] += v;
       r.cats[it.cat] = (r.cats[it.cat] || 0) + v;
@@ -568,10 +645,19 @@ function project(D, scen, N, who = 'casal') {
       if (pa.cartao) fat(pa.cartao, { desc: pa.desc, v: pa.valor, own: pa.own, tipo: 'parcela', n: i - pa.firstI + 1, de: pa.rest });
       const w = W(pa.own); if (!w) continue;
       r.parc += pa.valor * w; r.cats['Parcelas'] = (r.cats['Parcelas'] || 0) + pa.valor * w;
-      if (pa.cartao) r.cartao += pa.valor * w;
+      if (pa.cartao) { r.cartao += pa.valor * w; r.fatW[pa.cartao] = (r.fatW[pa.cartao] || 0) + pa.valor * w; }
+      else r.ev.push({ dia: pa.prox ? Math.min(pa.prox.getDate(), mlen(i)) : null, desc: `${pa.desc} (parcela)`, own: pa.own, v: -pa.valor * w });
     }
     let invTotal = 0;
     for (const x of inv) { x.saldo = x.saldo * (1 + x.rm) + x.aporte; r.aportes += x.aporte; invTotal += x.saldo; }
+    for (const nome in r.fatW) {
+      const c = D.cartoes.find(c => c.nome === nome);
+      r.ev.push({ dia: c && c.venc > 0 ? Math.min(c.venc, mlen(i)) : null, desc: `Fatura ${nome}`, own: c ? c.own : 'casal', v: -r.fatW[nome], fatura: true });
+    }
+    if (r.aportes > 0) {   // aportes: no dia da maior entrada do mês (quando o salário cai)
+      const top = r.ev.filter(e => e.v > 0).sort((a, b) => b.v - a.v)[0];
+      r.ev.push({ dia: top ? top.dia : 1, desc: 'Aportes nos investimentos', own: 'casal', v: -r.aportes, aporte: true });
+    }
     r.saidas = r.desp + r.parc;
     r.sobra = r.rec - r.saidas - r.aportes;
     conta += r.sobra;
@@ -775,6 +861,7 @@ function render() {
     ? 'Conta + investimentos do casal ao fim de cada mês, nos três cenários.'
     : `Patrimônio de ${whoName}: o que é dele(a) + a parte nos itens do casal (${pctF.format(weight(D, 'casal', who))}).`;
   renderCouple(D);
+  renderCalendar(D);
   renderCards(D);
 
   // ---- Fluxo
@@ -906,6 +993,72 @@ function renderCouple(D) {
       ${st.by.conjunta > 0 ? `<div class="kv total"><span>Depósito na conta conjunta</span><span>${esc(names.p1)} ${fmt(st.dep1)} · ${esc(names.p2)} ${fmt(st.dep2)}</span></div>` : ''}
       <div class="hint">O acerto compara o que cada um pagou direto (coluna “Pago por”) com a parte justa de cada um. Parcelas e aportes do casal não entram aqui.</div></div>`;
   document.getElementById('settleSel').addEventListener('change', e => { state.settleM = +e.target.value; renderCouple(D); });
+}
+
+/* ======================= Calendário do mês ======================= */
+/* Saldo em conta dia a dia. Parte do saldo de hoje (Premissas) e, no mês atual, só conta o que ainda vai acontecer. */
+function calendarMonths(D, who, upto) {
+  const P = project(D, state.scen, upto + 1, who), hoje = new Date().getDate();
+  let bal = D.prem.saldoConta * weight(D, 'casal', who);
+  const out = [];
+  for (let m = 0; m <= upto; m++) {
+    const i = P[m].i, n = mlen(i), first = m === 0 ? Math.min(hoje + 1, n) : 1;
+    const ev = P[m].ev.map(e => ({ ...e, semDia: e.dia == null, dia: e.dia == null ? first : e.dia }))
+      .filter(e => m > 0 || (!e.semDia && e.dia > hoje))
+      .sort((a, b) => a.dia - b.dia || b.v - a.v);
+    const start = bal, days = [];
+    let min = { v: Infinity, dia: first };
+    for (let d = first; d <= n; d++) {
+      ev.filter(e => e.dia === d).forEach(e => { bal += e.v; });
+      days.push({ d, v: bal });
+      if (bal < min.v) min = { v: bal, dia: d };
+    }
+    out.push({ i, first, n, start, end: bal, min, ev, days, entradas: ev.filter(e => e.v > 0).reduce((a, e) => a + e.v, 0),
+      saidas: -ev.filter(e => e.v < 0).reduce((a, e) => a + e.v, 0), passados: m === 0 ? P[0].ev.length - ev.length : 0 });
+  }
+  return out;
+}
+function renderCalendar(D) {
+  const who = state.who;
+  if (state.calM == null) state.calM = calendarMonths(D, who, 0)[0].ev.length ? 0 : 1;   // mês atual sem nada pela frente → próximo
+  const m = Math.min(state.calM, 11);
+  const C = calendarMonths(D, who, m)[m], i = C.i;
+  const sel = document.getElementById('calSel');
+  sel.innerHTML = Array.from({ length: 12 }, (_, k) => `<option value="${k}" ${k === m ? 'selected' : ''}>${miLong(D.start + k)}</option>`).join('');
+  sel.onchange = e => { state.calM = +e.target.value; renderCalendar(D); };
+  const dd = d => `${String(d).padStart(2, '0')}/${String(i % 12 + 1).padStart(2, '0')}`;
+  const wd = d => ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'][new Date(Math.floor(i / 12), i % 12, d).getDay()];
+  document.getElementById('calDesc').textContent = m === 0
+    ? `De amanhã até o fim de ${MESES[i % 12]}, partindo do saldo em conta de hoje (aba Premissas)${who === 'casal' ? '' : ', na parte de ' + D.names[who]}.`
+    : `Saldo em conta dia a dia em ${miLong(i).toLowerCase()}, continuando a projeção dos meses anteriores.`;
+  const neg = C.min.v < 0;
+  document.getElementById('calSum').innerHTML = [
+    ['Saldo no início', fmt(C.start)], ['Entradas', fmt(C.entradas)], ['Saídas', fmt(C.saidas)],
+    [`Menor saldo (${dd(C.min.dia)})`, `<span class="${neg ? 'delta-down' : ''}">${neg ? '⚠ ' : ''}${fmt(C.min.v)}</span>`],
+    ['Saldo no fim do mês', fmt(C.end)],
+  ].map(([l, v]) => `<div><span>${l}</span><b>${v}</b></div>`).join('');
+  lineChart(document.getElementById('chCal'), {
+    labels: C.days.map(x => String(x.d).padStart(2, '0')), height: 260,
+    series: [{ name: 'Saldo', color: 'var(--s1)', values: C.days.map(x => x.v), emph: true }],
+    ref: neg ? { value: 0, label: 'R$ 0' } : null,
+    tipHtml: k => { const day = C.days[k].d, evs = C.ev.filter(e => e.dia === day);
+      return `<b>${dd(day)} · ${wd(day)}</b>` + evs.map(e => `<div class="row"><span>${esc(e.desc)}</span><span class="${e.v > 0 ? 'delta-up' : ''}">${e.v > 0 ? '+' : '−'}${fmt(Math.abs(e.v))}</span></div>`).join('') +
+        `<div class="sep"></div><div class="row"><span>Saldo no fim do dia</span><span class="${C.days[k].v < 0 ? 'delta-down' : ''}">${fmt(C.days[k].v)}</span></div>`; },
+  });
+  const who2 = own => who === 'casal' && D.names[own] ? ` <small>· ${esc(D.names[own])}</small>` : '';
+  const comDia = C.ev.filter(e => !e.semDia), semDia = C.ev.filter(e => e.semDia);
+  let html = '', last = null;
+  comDia.forEach(e => {
+    if (e.dia !== last) {
+      last = e.dia; const after = C.days.find(x => x.d === e.dia);
+      html += `<li class="day">${dd(e.dia)} · ${wd(e.dia)} <small style="font-weight:400;color:var(--muted)">→ saldo ${fmt(after ? after.v : 0)}</small></li>`;
+    }
+    html += `<li class="it"><span>${esc(e.desc)}${who2(e.own)}</span><span class="${e.v > 0 ? 'delta-up' : ''}">${e.v > 0 ? '+' : '−'}${fmt(Math.abs(e.v))}</span></li>`;
+  });
+  if (semDia.length) html += `<li class="day">Sem dia definido <small style="font-weight:400;color:var(--muted)">(contado no dia ${C.first}; preencha "Dia do pagamento" nas Despesas)</small></li>` +
+    semDia.map(e => `<li class="it"><span>${esc(e.desc)}${who2(e.own)}</span><span>${e.v > 0 ? '+' : '−'}${fmt(Math.abs(e.v))}</span></li>`).join('');
+  if (m === 0 && C.passados > 0) html += `<li class="day" style="font-weight:400;color:var(--muted)">${C.passados} lançamento(s) deste mês já passaram (ou não têm dia) e não entram aqui.</li>`;
+  document.getElementById('calList').innerHTML = html || '<li class="it"><span>Nada previsto para o resto do mês.</span></li>';
 }
 
 /* ======================= Cartões de crédito ======================= */

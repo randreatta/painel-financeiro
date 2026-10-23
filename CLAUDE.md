@@ -41,15 +41,15 @@ Cabeçalhos e chaves são comparados **normalizados** (minúsculas, sem acento, 
 
 | Aba | Colunas principais |
 |---|---|
-| `Receitas <Nome>` (uma por pessoa) | Descrição, Categoria, Valor, Frequência (Mensal/Anual/Única), Início, Fim, Reajusta?, Desconta INSS? (+ fórmulas INSS, IRRF, Líquido) |
-| `Despesas <Nome>` (uma por pessoa) | as mesmas + Tipo (Fixa/Variável), Cartão |
-| `Despesas Casal` | as mesmas + Pago por (Rodrigo/Dhecika/Conta conjunta), Cartão |
+| `Receitas <Nome>` (uma por pessoa) | Descrição, Categoria, Valor, Frequência (Mensal/Anual/Única), Início, Fim, Reajusta?, Desconta INSS? (+ fórmulas INSS, IRRF, Líquido), Pagamento (dia), Adiantamento (%), Dia do adiantamento |
+| `Despesas <Nome>` (uma por pessoa) | as mesmas + Tipo (Fixa/Variável), Cartão, Dia do pagamento |
+| `Despesas Casal` | as mesmas + Pago por (Rodrigo/Dhecika/Conta conjunta), Cartão, Dia do pagamento |
 | `Parcelas` | Descrição, Categoria, De quem, Parcela, Restantes, Próxima, Cartão |
 | `Investimentos` | Descrição, De quem, Saldo atual, Aporte mensal, Rentabilidade anual |
 | `Cartões` | Cartão, De quem, Fechamento (dia), Vencimento (dia), Limite |
 | `Tabela INSS` | Faixa, De, Até, Alíquota (contribuição progressiva do empregado) |
 | `Tabela IRRF` | Faixa, De (base de cálculo), Alíquota, Parcela a deduzir (tabela progressiva mensal) |
-| `Premissas` | Chave, Parâmetro, Valor. Chaves: `irrf_desconto_simplificado`, `irrf_isencao_ate`, `irrf_reducao_ate`, `irrf_reducao_constante`, `irrf_reducao_fator`, `pessoa_1`, `pessoa_2`, `divisao_casal`, `percentual_pessoa_1`, `saldo_conta`, `inflacao`, `reajuste_salarial`, `mes_reajuste`, `meses_projecao`, `meta_reserva_meses`, `otimista_*`, `pessimista_*` |
+| `Premissas` | Chave, Parâmetro, Valor. Chaves: `irrf_desconto_simplificado`, `irrf_isencao_ate`, `irrf_reducao_ate`, `irrf_reducao_constante`, `irrf_reducao_fator`, `sabado_dia_util`, `pessoa_1`, `pessoa_2`, `divisao_casal`, `percentual_pessoa_1`, `saldo_conta`, `inflacao`, `reajuste_salarial`, `mes_reajuste`, `meses_projecao`, `meta_reserva_meses`, `otimista_*`, `pessimista_*` |
 | `Lançamentos` (opcional) | Data, Descrição, Categoria, De quem, Tipo (Receita/Despesa), Valor |
 
 - **Pessoas:** os nomes vêm de `pessoa_1` (Rodrigo) e `pessoa_2` (Dhecika) na Premissas e
@@ -94,6 +94,21 @@ Cabeçalhos e chaves são comparados **normalizados** (minúsculas, sem acento, 
 - A coluna antiga "Desconta IRRF?" ainda é aceita como sinônimo.
 - A divisão proporcional do casal usa a renda **líquida**.
 - Fórmulas da planilha estão no padrão pt-BR (separador `;`). Ao escrever pela API, use `;` e nomes em inglês.
+
+## Datas de pagamento e Calendário do mês
+
+- Salários quinzenais: Rodrigo recebe 40% do **bruto** no dia 20 (adiantamento) e o saldo (já sem INSS/IRRF)
+  no 5º dia útil; Dhecika, 40% no dia 15 e o saldo no 1º dia útil. Na planilha: "Pagamento (dia)",
+  "Adiantamento (%)", "Dia do adiantamento". Receita sem "Pagamento (dia)" (13º, férias) cai no dia do salário
+  da mesma pessoa (`pagPadrao`).
+- `payDay()`: "Nº dia útil" conta sábado se `sabado_dia_util = Sim` (regra da CLT), sem domingo e sem feriado
+  nacional (`feriados()`: fixos + 20/11 + Sexta-feira Santa); se o prazo cair num sábado, o crédito vem no dia
+  útil anterior. Dia fixo em fim de semana/feriado também é antecipado. "Último dia útil" é aceito.
+- `project()` gera `r.ev` (eventos datados): entradas, despesas sem cartão no "Dia do pagamento", parcelas sem
+  cartão no dia da "Próxima", uma "Fatura X" por cartão no vencimento, e os aportes no dia da maior entrada.
+  Despesa sem dia é contada no 1º dia do período (conservador) e listada à parte.
+- `calendarMonths()` encadeia o saldo dia a dia a partir do `saldo_conta` de **hoje**: no mês atual só entram
+  eventos depois de hoje. (A projeção mensal de `project()` ainda conta o mês atual inteiro.)
 
 ## Interface
 
