@@ -4,11 +4,34 @@ Painel financeiro de Rodrigo e Dhecika. Site estático publicado no GitHub Pages
 (`https://randreatta.github.io/painel-financeiro/`) que lê os dados de uma planilha
 do Google Sheets ("nosso financeiro") depois do login com Google.
 
-## Arquitetura
+## Migração em andamento (branch `migracao-cloudflare`)
+
+O projeto está migrando para Cloudflare (Workers + Access) em etapas; o plano está no doc
+"Plano de migração: painel financeiro para Cloudflare". **A `main` ainda é o painel v1** (um
+`index.html` só, publicado pelo GitHub Pages). O branch `migracao-cloudflare` já tem a Etapa 1:
+
+- **Vite + React + TypeScript**, sem bibliotecas de gráfico (SVG à mão, em `src/componentes/graficos.tsx`).
+- `src/calculos/`: regras puras (`folha.ts`, `datas.ts`, `projecao.ts`, `casal.ts`, `calendario.ts`,
+  `painel.ts`, `util.ts`, `tipos.ts`). `src/planilha/normalizar.ts` lê as abas; `src/planilha/google.ts`
+  faz login e leitura (provisório até as Etapas 2 e 3). `src/componentes/secoes/` = uma seção por arquivo.
+- "Hoje" é **parâmetro** (`normalizeData(raw, hoje)`, `calendarMonths(..., hoje)`): nunca chame
+  `new Date()` dentro dos cálculos.
+- `public/config.js` (copiado para o build). `legado-index.html` = o v1, só como referência.
+- **Testes:** `npm test` (Vitest, `TZ=America/Sao_Paulo`). `testes/paridade.test.ts` compara o motor
+  novo com `testes/gabarito/*.json`, gerado rodando o v1 sobre `testes/fixtures/*.json` (dados
+  **fictícios**: Bruno e Ana) com hoje = 23/10/2026 15:00. Mudou uma regra de cálculo de propósito?
+  Atualize o gabarito junto e explique no commit. Nunca coloque dados reais do casal nas fixtures.
+- **Sem npm no ambiente do Claude:** o registro do npm é bloqueado na sessão de nuvem. A automação
+  `.github/workflows/deps.yml` instala os pacotes no GitHub e publica `node_modules.tgz` +
+  `package-lock.json` no branch `ci-deps`; para trabalhar: `git fetch origin ci-deps:refs/remotes/origin/ci-deps`,
+  `git show origin/ci-deps:node_modules.tgz | tar xz`. Mexeu no `package.json`? Faça push, espere o
+  workflow "Dependências" e traga o lock e os pacotes de novo. `.github/workflows/ci.yml` roda testes
+  e build a cada push no branch (resultados como anotações: `gh run view <id>`; o log completo não baixa).
+
+## Arquitetura do v1 (main)
 
 - **Sem build, sem dependências.** Tudo está em `index.html`: HTML, CSS e JS num arquivo só,
-  com os gráficos em SVG desenhados à mão (sem Chart.js nem outra biblioteca). O `index.html`
-  é a fonte da verdade: edite-o direto.
+  com os gráficos em SVG desenhados à mão (sem Chart.js nem outra biblioteca).
 - **`config.js`** define `window.CONFIG = { CLIENT_ID, SPREADSHEET_ID }`. Os dois são públicos
   por natureza (não são senhas). Não mude o arquivo sem o usuário pedir.
 - **`modelo/planilha-modelo.xlsx`** é a planilha modelo, com dados de exemplo, para recomeçar do zero.
@@ -121,8 +144,8 @@ Cabeçalhos e chaves são comparados **normalizados** (minúsculas, sem acento, 
 
 ## Como testar antes de publicar
 
-Não há testes automatizados no repositório. O que funciona bem:
-1. Servir a pasta: `python3 -m http.server 8000`.
+No branch da migração: `npm test` e `npm run build`. Para a tela (vale para v1 e v2):
+1. Servir a pasta (v1) ou o `dist/` (v2): `python3 -m http.server 8000`.
 2. Com Playwright, interceptar `config.js`, `accounts.google.com/o/oauth2/v2/auth` (responder
    com um redirect para `REDIRECT_URI#access_token=...&state=...&scope=...spreadsheets...`),
    `oauth2/v3/userinfo` e `sheets.googleapis.com` (devolver `valueRanges` montados da planilha
@@ -133,6 +156,8 @@ Não há testes automatizados no repositório. O que funciona bem:
 ## Publicação
 
 - Commit na `main` → o GitHub Pages publica em 1–2 min (aba Actions, "pages build and deployment").
+  **Não junte `migracao-cloudflare` na `main` antes da virada (Etapa 4):** o Pages serviria o
+  `index.html` do Vite sem build e o site quebraria.
 - Mensagens de commit em português, curtas, no imperativo ("Adiciona…", "Corrige…").
 - Antes de publicar: `git pull --ff-only` (o usuário às vezes edita pelo site do GitHub).
 - Nunca crie um segundo `index.html` (ex.: `index (1).html`). O Pages só serve `index.html` na raiz.
