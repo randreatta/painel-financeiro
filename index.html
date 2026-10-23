@@ -421,7 +421,7 @@ function normalizeData(raw) {
       ini: parseDate(pick(r, 'inicio')),
       fim: parseDate(pick(r, 'fim')),
       reaj: norm(pick(r, 'reajusta', 'reajuste', 'corrigeinflacao')).startsWith('s'),
-      irrf: !isExp && norm(pick(r, 'descontairrf', 'descontair')).startsWith('s'),
+      folha: !isExp && norm(pick(r, 'descontainss', 'descontairrf', 'clt')).startsWith('s'),   // bruto CLT: desconta INSS e verifica IRRF
       tipo: isExp ? (norm(pick(r, 'tipo')).startsWith('v') ? 'variavel' : 'fixa') : null,
       own: s.own,
       cartao: cardOf(pick(r, 'cartao', 'pagamento', 'formadepagamento')),
@@ -476,7 +476,13 @@ function normalizeData(raw) {
     { de: 3751.06, aliq: 0.225, ded: 675.49 }, { de: 4664.69, aliq: 0.275, ded: 908.73 }];
   const irrf = { faixas, simplificado: num('irrfdescontosimplificado', 607.2), isento: num('irrfisencaoate', 5000),
     redAte: num('irrfreducaoate', 7350), redK: num('irrfreducaoconstante', 978.62), redF: num('irrfreducaofator', 0.133145) };
-  const liq = it => it.valor - (it.irrf ? irrfOf(irrf, it.valor) : 0);
+  // ---- INSS (aba Tabela INSS; padrão = tabela 2026, Portaria MPS/MF nº 13/2026)
+  let inssF = sheetRows(raw, 'Tabela INSS').map(r => ({ de: parseNum(pick(r, 'de')), ate: parseNum(pick(r, 'ate')), aliq: pctVal(pick(r, 'aliquota')) }))
+    .filter(f => !isNaN(f.de) && !isNaN(f.ate) && !isNaN(f.aliq)).sort((a, b) => a.de - b.de);
+  if (!inssF.length) inssF = [{ de: 0, ate: 1621, aliq: 0.075 }, { de: 1621, ate: 2902.84, aliq: 0.09 },
+    { de: 2902.84, ate: 4354.27, aliq: 0.12 }, { de: 4354.27, ate: 8475.55, aliq: 0.14 }];
+  irrf.inss = inssF;
+  const liq = it => it.valor - (it.folha ? folhaOf(irrf, it.valor).total : 0);
 
   // ---- divisão das despesas do casal (parte da pessoa 1)
   const monthlyEq = it => it.freq === 'mensal' ? ((it.iniI == null || it.iniI <= start) && (it.fimI == null || it.fimI >= start) ? liq(it) : 0)
@@ -491,11 +497,22 @@ function normalizeData(raw) {
   return { receitas, despesas, parcelas, invest, prem, lanc, warnings, start, names, share1, shareLabel, inc, cartoes, irrf };
 }
 
-/* IRRF mensal sobre um rendimento bruto: tabela progressiva sobre (bruto − desconto simplificado),
+/* INSS do empregado: progressivo, cada alíquota só sobre a parte do salário dentro da faixa (teto = último "Até"). */
+function inssOf(T, bruto) {
+  if (!(bruto > 0)) return 0;
+  const v = T.inss.reduce((a, f) => a + (bruto > f.de ? (Math.min(bruto, f.ate) - f.de) * f.aliq : 0), 0);
+  return Math.round(v * 100) / 100;
+}
+/* Descontos de folha (CLT) sobre um bruto: INSS + IRRF. */
+function folhaOf(T, bruto) {
+  const inss = inssOf(T, bruto), ir = irrfOf(T, bruto, inss);
+  return { inss, irrf: ir, total: inss + ir };
+}
+/* IRRF mensal: tabela progressiva sobre (bruto − o maior entre INSS e desconto simplificado),
    depois a redução de 2026 (zera até o limite de isenção; redução parcial até redAte). */
-function irrfOf(T, bruto) {
+function irrfOf(T, bruto, inss = 0) {
   if (!(bruto > 0) || bruto <= T.isento) return 0;
-  const base = Math.max(0, bruto - T.simplificado);
+  const base = Math.max(0, bruto - Math.max(inss, T.simplificado));
   let f = T.faixas[0]; for (const x of T.faixas) if (base >= x.de) f = x;
   const tabela = Math.round((base * f.aliq - f.ded) * 100) / 100;
   const reducao = bruto <= T.redAte ? Math.max(0, T.redK - T.redF * bruto) : 0;
@@ -528,11 +545,11 @@ function project(D, scen, N, who = 'casal') {
     const i = D.start + m;
     if (m > 0 && p.mesReajuste >= 1 && (i % 12) + 1 === p.mesReajuste) reajN++;
     const fInc = Math.pow(1 + p.reajuste, reajN), fExp = Math.pow(1 + infl, m / 12);
-    const r = { i, rec: 0, desp: 0, fixas: 0, variaveis: 0, despProprias: 0, despCasal: 0, parc: 0, aportes: 0, cartao: 0, irrf: 0, recBruta: 0, cats: {}, recItems: [], expItems: [], casalItems: [], faturas: {} };
+    const r = { i, rec: 0, desp: 0, fixas: 0, variaveis: 0, despProprias: 0, despCasal: 0, parc: 0, aportes: 0, cartao: 0, inss: 0, irrf: 0, recBruta: 0, cats: {}, recItems: [], expItems: [], casalItems: [], faturas: {} };
     const fat = (nome, item) => { const f = r.faturas[nome] = r.faturas[nome] || { total: 0, items: [] }; f.total += item.v; f.items.push(item); };
     for (const it of D.receitas) { const w = W(it.own); if (w && occurs(it, i)) {
-      const bruto = it.valor * (it.reaj ? fInc : 1), imposto = it.irrf ? irrfOf(D.irrf, bruto) : 0;
-      const v = (bruto - imposto) * w; r.rec += v; r.recBruta += bruto * w; r.irrf += imposto * w;
+      const bruto = it.valor * (it.reaj ? fInc : 1), fo = it.folha ? folhaOf(D.irrf, bruto) : { inss: 0, irrf: 0, total: 0 };
+      const v = (bruto - fo.total) * w; r.rec += v; r.recBruta += bruto * w; r.inss += fo.inss * w; r.irrf += fo.irrf * w;
       if (it.freq !== 'mensal') r.recItems.push({ ...it, v });
     } }
     for (const it of D.despesas) { if (!occurs(it, it.cartao ? i - 1 : i)) continue;   // cartão: paga na fatura do mês seguinte
@@ -743,7 +760,7 @@ function render() {
   const hit = P.find(r => r.pat / avgOut >= meta);
   const deltaPat = last.pat - patHoje;
   const kp = [
-    ['Receita líquida deste mês' + esc(ofWho), fmt(cur.rec), D.receitas.some(it => it.irrf) ? `${fmt(cur.recBruta)} bruto − ${fmt(cur.irrf)} de IRRF` : miLong(cur.i)],
+    ['Receita líquida deste mês' + esc(ofWho), fmt(cur.rec), D.receitas.some(it => it.folha) ? `${fmt(cur.recBruta)} bruto − ${fmt(cur.inss)} de INSS` + (cur.irrf > 0 ? ` − ${fmt(cur.irrf)} de IRRF` : '') : miLong(cur.i)],
     ['Saídas deste mês' + esc(ofWho), fmt(cur.saidas), (cur.cartao > 0 ? `${fmt(cur.cartao)} em faturas de cartão · ` : '') + (who === 'casal' ? `${fmt(cur.desp)} despesas + ${fmt(cur.parc)} parcelas`
       : `${fmt(cur.despProprias)} pessoais + ${fmt(cur.despCasal)} da parte no casal + ${fmt(cur.parc)} parcelas`)],
     ['Sobra após aportes', `<span class="${cur.sobra >= 0 ? '' : 'delta-down'}">${fmt(cur.sobra)}</span>`, `Taxa de poupança ${pctF.format(taxa)} (com aportes)`],
@@ -768,6 +785,7 @@ function render() {
       const extras = r.recItems.concat(r.expItems).map(it => `<div class="row"><span>${esc(it.desc)}</span><span>${fmt(it.v)}</span></div>`).join('');
       return `<b>${miLong(r.i)}</b>
         <div class="row"><span>${sw('var(--s1)')}Receitas (líquidas)</span><span>${fmt(r.rec)}</span></div>
+        ${r.inss > 0 ? `<div class="row"><span>&nbsp;&nbsp;INSS descontado</span><span>${fmt(r.inss)}</span></div>` : ''}
         ${r.irrf > 0 ? `<div class="row"><span>&nbsp;&nbsp;IRRF descontado</span><span>${fmt(r.irrf)}</span></div>` : ''}
         <div class="row"><span>${sw('var(--s2)')}Saídas</span><span>${fmt(r.saidas)}</span></div>
         <div class="row"><span>&nbsp;&nbsp;fixas</span><span>${fmt(r.fixas)}</span></div>

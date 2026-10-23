@@ -41,12 +41,13 @@ Cabeçalhos e chaves são comparados **normalizados** (minúsculas, sem acento, 
 
 | Aba | Colunas principais |
 |---|---|
-| `Receitas <Nome>` (uma por pessoa) | Descrição, Categoria, Valor, Frequência (Mensal/Anual/Única), Início, Fim, Reajusta?, Desconta IRRF? (+ fórmulas IRRF, Líquido) |
+| `Receitas <Nome>` (uma por pessoa) | Descrição, Categoria, Valor, Frequência (Mensal/Anual/Única), Início, Fim, Reajusta?, Desconta INSS? (+ fórmulas INSS, IRRF, Líquido) |
 | `Despesas <Nome>` (uma por pessoa) | as mesmas + Tipo (Fixa/Variável), Cartão |
 | `Despesas Casal` | as mesmas + Pago por (Rodrigo/Dhecika/Conta conjunta), Cartão |
 | `Parcelas` | Descrição, Categoria, De quem, Parcela, Restantes, Próxima, Cartão |
 | `Investimentos` | Descrição, De quem, Saldo atual, Aporte mensal, Rentabilidade anual |
 | `Cartões` | Cartão, De quem, Fechamento (dia), Vencimento (dia), Limite |
+| `Tabela INSS` | Faixa, De, Até, Alíquota (contribuição progressiva do empregado) |
 | `Tabela IRRF` | Faixa, De (base de cálculo), Alíquota, Parcela a deduzir (tabela progressiva mensal) |
 | `Premissas` | Chave, Parâmetro, Valor. Chaves: `irrf_desconto_simplificado`, `irrf_isencao_ate`, `irrf_reducao_ate`, `irrf_reducao_constante`, `irrf_reducao_fator`, `pessoa_1`, `pessoa_2`, `divisao_casal`, `percentual_pessoa_1`, `saldo_conta`, `inflacao`, `reajuste_salarial`, `mes_reajuste`, `meses_projecao`, `meta_reserva_meses`, `otimista_*`, `pessimista_*` |
 | `Lançamentos` (opcional) | Data, Descrição, Categoria, De quem, Tipo (Receita/Despesa), Valor |
@@ -76,16 +77,21 @@ Cabeçalhos e chaves são comparados **normalizados** (minúsculas, sem acento, 
 - **Acerto** (`settlement()`): compara o que cada um pagou direto ("Pago por") com a parte
   justa. O que sai da "Conta conjunta" vira depósito proporcional de cada um.
 
-## IRRF (salário bruto → líquido)
+## Descontos de folha: INSS + IRRF (salário bruto → líquido)
 
-- Receita com "Desconta IRRF? = Sim" tem **Valor bruto**. O painel desconta o IRRF **mês a mês sobre o bruto já
-  reajustado** (`irrfOf()`): tabela progressiva sobre `bruto − irrf_desconto_simplificado`, arredondada a centavos;
-  depois a redução de 2026 (Lei 15.270/2025): bruto ≤ `irrf_isencao_ate` → imposto zero; até `irrf_reducao_ate` →
-  redução de `irrf_reducao_constante − irrf_reducao_fator × bruto`. Exemplo oficial: R$ 6.000 → R$ 394,54.
-- O Rodrigo só tem IRRF como desconto (sem INSS), por isso o desconto simplificado. 13º e 1/3 de férias usam a
-  mesma conta, item por item (aproximação: na folha real, férias são tributadas junto no mês de pagamento).
-- A planilha tem a mesma conta em fórmulas (colunas IRRF e Líquido; "Mensal equiv." usa o líquido). Mantenha as duas
-  iguais. Se faltar a aba `Tabela IRRF` ou as chaves `irrf_*`, o painel usa a tabela 2026 embutida.
+- Receita com "Desconta INSS? = Sim" tem **Valor bruto** (CLT). O painel calcula, **mês a mês sobre o bruto já
+  reajustado**, `folhaOf()` = `inssOf()` + `irrfOf()`:
+  - **INSS** progressivo pela aba `Tabela INSS` (De, Até, Alíquota): cada alíquota só sobre a parte do salário na
+    faixa; teto = último "Até". 2026 (Portaria MPS/MF nº 13/2026): 7,5% até 1.621; 9% até 2.902,84; 12% até
+    4.354,27; 14% até 8.475,55 (máx. R$ 988,09). Ex.: 4.338 → 409,16; 5.000 → 501,51.
+  - **IRRF**: tabela progressiva (aba `Tabela IRRF`) sobre `bruto − max(INSS, irrf_desconto_simplificado)`,
+    arredondada a centavos; depois a redução de 2026 (Lei 15.270/2025): bruto ≤ `irrf_isencao_ate` → zero; até
+    `irrf_reducao_ate` → redução de `irrf_reducao_constante − irrf_reducao_fator × bruto`.
+- O salário do Rodrigo (R$ 4.338) só tem INSS na prática: o IRRF é zero até R$ 5.000 de bruto.
+- 13º e 1/3 de férias usam a mesma conta, item por item (aproximação: na folha real, férias + 1/3 somam no mês).
+- A planilha tem a mesma conta em fórmulas (colunas INSS, IRRF, Líquido; "Mensal equiv." usa o líquido).
+  Mantenha as duas iguais. Sem as abas de tabela, o painel usa as tabelas 2026 embutidas.
+- A coluna antiga "Desconta IRRF?" ainda é aceita como sinônimo.
 - A divisão proporcional do casal usa a renda **líquida**.
 - Fórmulas da planilha estão no padrão pt-BR (separador `;`). Ao escrever pela API, use `;` e nomes em inglês.
 
