@@ -1,0 +1,27 @@
+name: Dependências
+# Instala os pacotes e publica node_modules + package-lock.json no branch ci-deps.
+# Existe porque o ambiente de desenvolvimento do Claude não alcança o registro do npm.
+on:
+  push:
+    branches: [migracao-cloudflare]
+    paths: [package.json]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  deps:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - name: Publicar no branch ci-deps
+        run: |
+          mkdir -p /tmp/out && tar czf /tmp/out/node_modules.tgz node_modules && cp package.json package-lock.json /tmp/out/
+          ls -la /tmp/out
+          echo "::notice title=deps::$(du -h /tmp/out/node_modules.tgz | cut -f1) $(node -p "Object.keys(require('./package-lock.json').packages).length") pacotes"
+          cd /tmp/out && git init -q -b ci-deps && git add -A
+          git -c user.name="ci" -c user.email="ci@users.noreply.github.com" commit -qm "deps de ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" ci-deps
