@@ -28,6 +28,24 @@ O projeto está migrando para Cloudflare (Workers + Access) em etapas; o plano e
   workflow "Dependências" e traga o lock e os pacotes de novo. `.github/workflows/ci.yml` roda testes
   e build a cada push no branch (resultados como anotações: `gh run view <id>`; o log completo não baixa).
 
+### Worker (Etapa 2) — `worker/`, `wrangler.jsonc`
+
+- Um Worker serve `dist/` (arquivos estáticos, SPA) e só `/api/*` passa pelo código (`run_worker_first`).
+- `GET /api/dados` → `{ email, raw }` (mesmo formato de `raw` que `normalizeData` entende); `GET /api/eu` → `{ email }`.
+- Toda rota `/api/*` valida o JWT do Cloudflare Access (`cf-access-jwt-assertion`, issuer = `TEAM_DOMAIN`,
+  audience = `POLICY_AUD`) e confere `ALLOWED_EMAILS`. Sem essas variáveis → 500, nunca libera dados.
+- A planilha é lida com a **conta de serviço** do Google (segredo `GOOGLE_SA_KEY`, escopo
+  `spreadsheets.readonly`, compartilhada como Leitor na planilha). O token do Google fica em memória até
+  ~2 min antes de expirar.
+- Variáveis no painel do Cloudflare (Settings → Variables and Secrets), **nunca no repositório**:
+  `TEAM_DOMAIN`, `POLICY_AUD` (texto), `ALLOWED_EMAILS`, `GOOGLE_SA_KEY` (segredos). `keep_vars: true`
+  impede que o deploy apague as variáveis do painel. `SPREADSHEET_ID` está no `wrangler.jsonc` (já é público).
+- O front tenta `/api/dados` primeiro (`src/planilha/worker.ts`); se a resposta não for JSON (GitHub Pages),
+  cai no login Google antigo (`src/planilha/google.ts`), que sai na Etapa 4. "Sair" no modo Worker →
+  `/cdn-cgi/access/logout`.
+- Testes: `testes/worker.test.ts` (chaves RSA geradas no teste; fora do Cloudflare o `jose` busca o JWKS
+  por http do Node, então o teste injeta `jwks[TEAM]` com `createLocalJWKSet`).
+
 ## Arquitetura do v1 (main)
 
 - **Sem build, sem dependências.** Tudo está em `index.html`: HTML, CSS e JS num arquivo só,

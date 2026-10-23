@@ -4,6 +4,7 @@ import { derivar } from './calculos/painel';
 import type { Cenario, Raw, Visao } from './calculos/tipos';
 import { normalizeData } from './planilha/normalizar';
 import { configurado, concluirLogin, entrar, ErroApi, lerPlanilha, lerRetorno, linkPlanilha, sair, sessaoSalva, type Sessao } from './planilha/google';
+import { ErroWorker, lerViaWorker, sairDoAccess } from './planilha/worker';
 import { Alertas, Kpis } from './componentes/secoes/Resumo';
 import { Casal } from './componentes/secoes/Casal';
 import { Categorias, Composicao, Fluxo, Historico, Patrimonio } from './componentes/secoes/Graficos';
@@ -14,7 +15,9 @@ import { Notas, Tabela } from './componentes/secoes/Tabela';
 import type { PropsSecao } from './componentes/comum';
 
 type Estado =
+  | { fase: 'iniciando' }
   | { fase: 'nao-configurado' }
+  | { fase: 'erro-worker'; msg: string }
   | { fase: 'login'; msg?: string }
   | { fase: 'carregando' }
   | { fase: 'pronto'; raw: Raw; lidaEm: Date };
@@ -27,8 +30,11 @@ const LogoGoogle = () => <svg viewBox="0 0 48 48" aria-hidden="true">
 </svg>;
 
 export default function App() {
-  const [estado, setEstado] = useState<Estado>(configurado ? { fase: 'carregando' } : { fase: 'nao-configurado' });
+  const [estado, setEstado] = useState<Estado>({ fase: 'iniciando' });
   const [sessao, setSessao] = useState<Sessao | null>(null);
+  /** 'worker' = no Cloudflare (login pelo Access, dados por /api/dados); 'google' = GitHub Pages (login Google no navegador). */
+  const [modo, setModo] = useState<'worker' | 'google' | null>(null);
+  const [emailWorker, setEmailWorker] = useState('');
   const [scen, setScen] = useState<Cenario>('base');
   const [who, setWho] = useState<Visao>('casal');
   const [N, setN] = useState<number | null>(null);   // null = usa "meses_projecao" da planilha
@@ -47,13 +53,30 @@ export default function App() {
     }
   }, []);
 
-  useEffect(() => {   // início: volta do login do Google, sessão salva ou tela de login
-    if (!configurado) return;
+  const carregarWorker = useCallback(async () => {
+    try {
+      const r = await lerViaWorker();
+      if (!r) return false;
+      setModo('worker'); setEmailWorker(r.email); setEstado({ fase: 'pronto', raw: r.raw, lidaEm: new Date() });
+    } catch (e) {
+      setModo('worker');
+      const st = e instanceof ErroWorker ? e.status : 0;
+      setEstado({ fase: 'erro-worker', msg: (e as Error).message + (st === 401 ? ' Recarregue a página para entrar de novo.' : '') });
+    }
+    return true;
+  }, []);
+
+  useEffect(() => {   // início: Worker do Cloudflare; senão volta do login do Google, sessão salva ou tela de login
+    (async () => {
+    if (await carregarWorker()) return;
+    setModo('google');
+    if (!configurado) { setEstado({ fase: 'nao-configurado' }); return; }
     const volta = lerRetorno();
     if (volta && 'erro' in volta) { setEstado({ fase: 'login', msg: volta.erro }); return; }
     if (volta) { concluirLogin(volta).then(s => { setSessao(s); carregar(s); }); return; }
     const s = sessaoSalva(); setSessao(s); carregar(s);
-  }, [carregar]);
+    })();
+  }, [carregar, carregarWorker]);
 
   const hoje = useMemo(() => new Date(), [estado]);   // eslint-friendly: "hoje" é relido a cada leitura da planilha
   const D = useMemo(() => estado.fase === 'pronto' ? normalizeData(estado.raw, hoje) : null, [estado, hoje]);
@@ -63,7 +86,9 @@ export default function App() {
 
   const fonte = estado.fase === 'pronto'
     ? `Planilha “${String(estado.raw._planilha ?? '')}” · lida às ${estado.lidaEm.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`
-    : estado.fase === 'nao-configurado' ? 'Site não configurado' : estado.fase === 'login' ? 'Entre para ver seus dados' : 'Lendo a planilha…';
+    : estado.fase === 'nao-configurado' ? 'Site não configurado' : estado.fase === 'login' ? 'Entre para ver seus dados'
+    : estado.fase === 'erro-worker' ? 'Não consegui ler os dados' : 'Lendo a planilha…';
+  const email = modo === 'worker' ? emailWorker : sessao?.email;
 
   const props: PropsSecao | null = D && d ? { D, scen, who, N: meses, d } : null;
   return <div className="wrap">
@@ -84,10 +109,12 @@ export default function App() {
         <select aria-label="Horizonte da projeção" value={meses} onChange={e => setN(+e.target.value)}>
           {opcoesN.map(n => <option key={n} value={n}>{n} meses</option>)}
         </select>
-        <a className="btn" href={linkPlanilha} target="_blank" rel="noopener" title="Abrir a planilha no Google Sheets para lançar valores">Editar planilha ↗</a>
-        <button className="btn" title="Ler a planilha de novo" onClick={() => carregar(sessao)}>↻ Atualizar</button>
-        {sessao?.email && <span className="user">{sessao.email}</span>}
-        <button className="btn" title="Sair da conta Google neste site" onClick={() => { sair(sessao); setSessao(null); setEstado({ fase: 'login', msg: 'Você saiu.' }); }}>Sair</button>
+        <a className="btn" href={linkPlanilha || 'https://docs.google.com/spreadsheets/'} target="_blank" rel="noopener" title="Abrir a planilha no Google Sheets para lançar valores">Editar planilha ↗</a>
+        <button className="btn" title="Ler a planilha de novo" onClick={() => modo === 'worker' ? carregarWorker() : carregar(sessao)}>↻ Atualizar</button>
+        {email && <span className="user">{email}</span>}
+        <button className="btn" title="Sair deste site" onClick={() => {
+          if (modo === 'worker') return sairDoAccess();
+          sair(sessao); setSessao(null); setEstado({ fase: 'login', msg: 'Você saiu.' }); }}>Sair</button>
       </div>}
     </header>
 
@@ -100,7 +127,9 @@ export default function App() {
       <div className="err">{estado.msg}</div>
       <div className="small">Os dados ficam na sua planilha do Google; este site só os lê no seu navegador.</div>
     </section>}
-    {estado.fase === 'carregando' && <div className="loading">Lendo seus dados…</div>}
+    {(estado.fase === 'carregando' || estado.fase === 'iniciando') && <div className="loading">Lendo seus dados…</div>}
+    {estado.fase === 'erro-worker' && <section className="card login"><h2>Não consegui ler os dados</h2><div className="err">{estado.msg}</div>
+      <div className="small"><button className="btn" onClick={() => carregarWorker()}>Tentar de novo</button></div></section>}
     {estado.fase === 'nao-configurado' && <div className="loading">Preencha o CLIENT_ID e o SPREADSHEET_ID no config.js para ligar o painel à planilha.</div>}
 
     {props && <>

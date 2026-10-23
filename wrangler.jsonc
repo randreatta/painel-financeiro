@@ -1,0 +1,23 @@
+// Configuração do Worker no Cloudflare. O build (npm run build) gera dist/, servido como arquivos estáticos;
+// só /api/* passa pelo código em worker/index.ts.
+{
+  "name": "painel-financeiro",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  // Mantém as variáveis criadas no painel do Cloudflare a cada publicação.
+  "keep_vars": true,
+  "vars": {
+    "SPREADSHEET_ID": "1fK79JnUBF0FnWHPxlDlTJ971DEzUqQa4-Cng11u6kvM"
+  }
+  // No painel do Cloudflare (Settings → Variables and Secrets), nunca no repositório:
+  //   TEAM_DOMAIN    (texto)   https://<equipe>.cloudflareaccess.com
+  //   POLICY_AUD     (texto)   Application Audience (AUD) Tag da aplicação do Access
+  //   ALLOWED_EMAILS (segredo) e-mails do casal, separados por vírgula
+  //   GOOGLE_SA_KEY  (segredo) conteúdo do JSON da conta de serviço
+}
