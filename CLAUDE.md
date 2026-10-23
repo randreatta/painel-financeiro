@@ -41,13 +41,14 @@ Cabeçalhos e chaves são comparados **normalizados** (minúsculas, sem acento, 
 
 | Aba | Colunas principais |
 |---|---|
-| `Receitas <Nome>` (uma por pessoa) | Descrição, Categoria, Valor, Frequência (Mensal/Anual/Única), Início, Fim, Reajusta? |
+| `Receitas <Nome>` (uma por pessoa) | Descrição, Categoria, Valor, Frequência (Mensal/Anual/Única), Início, Fim, Reajusta?, Desconta IRRF? (+ fórmulas IRRF, Líquido) |
 | `Despesas <Nome>` (uma por pessoa) | as mesmas + Tipo (Fixa/Variável), Cartão |
 | `Despesas Casal` | as mesmas + Pago por (Rodrigo/Dhecika/Conta conjunta), Cartão |
 | `Parcelas` | Descrição, Categoria, De quem, Parcela, Restantes, Próxima, Cartão |
 | `Investimentos` | Descrição, De quem, Saldo atual, Aporte mensal, Rentabilidade anual |
 | `Cartões` | Cartão, De quem, Fechamento (dia), Vencimento (dia), Limite |
-| `Premissas` | Chave, Parâmetro, Valor. Chaves: `pessoa_1`, `pessoa_2`, `divisao_casal`, `percentual_pessoa_1`, `saldo_conta`, `inflacao`, `reajuste_salarial`, `mes_reajuste`, `meses_projecao`, `meta_reserva_meses`, `otimista_*`, `pessimista_*` |
+| `Tabela IRRF` | Faixa, De (base de cálculo), Alíquota, Parcela a deduzir (tabela progressiva mensal) |
+| `Premissas` | Chave, Parâmetro, Valor. Chaves: `irrf_desconto_simplificado`, `irrf_isencao_ate`, `irrf_reducao_ate`, `irrf_reducao_constante`, `irrf_reducao_fator`, `pessoa_1`, `pessoa_2`, `divisao_casal`, `percentual_pessoa_1`, `saldo_conta`, `inflacao`, `reajuste_salarial`, `mes_reajuste`, `meses_projecao`, `meta_reserva_meses`, `otimista_*`, `pessimista_*` |
 | `Lançamentos` (opcional) | Data, Descrição, Categoria, De quem, Tipo (Receita/Despesa), Valor |
 
 - **Pessoas:** os nomes vêm de `pessoa_1` (Rodrigo) e `pessoa_2` (Dhecika) na Premissas e
@@ -74,6 +75,19 @@ Cabeçalhos e chaves são comparados **normalizados** (minúsculas, sem acento, 
   50/50 ou percentual fixo.
 - **Acerto** (`settlement()`): compara o que cada um pagou direto ("Pago por") com a parte
   justa. O que sai da "Conta conjunta" vira depósito proporcional de cada um.
+
+## IRRF (salário bruto → líquido)
+
+- Receita com "Desconta IRRF? = Sim" tem **Valor bruto**. O painel desconta o IRRF **mês a mês sobre o bruto já
+  reajustado** (`irrfOf()`): tabela progressiva sobre `bruto − irrf_desconto_simplificado`, arredondada a centavos;
+  depois a redução de 2026 (Lei 15.270/2025): bruto ≤ `irrf_isencao_ate` → imposto zero; até `irrf_reducao_ate` →
+  redução de `irrf_reducao_constante − irrf_reducao_fator × bruto`. Exemplo oficial: R$ 6.000 → R$ 394,54.
+- O Rodrigo só tem IRRF como desconto (sem INSS), por isso o desconto simplificado. 13º e 1/3 de férias usam a
+  mesma conta, item por item (aproximação: na folha real, férias são tributadas junto no mês de pagamento).
+- A planilha tem a mesma conta em fórmulas (colunas IRRF e Líquido; "Mensal equiv." usa o líquido). Mantenha as duas
+  iguais. Se faltar a aba `Tabela IRRF` ou as chaves `irrf_*`, o painel usa a tabela 2026 embutida.
+- A divisão proporcional do casal usa a renda **líquida**.
+- Fórmulas da planilha estão no padrão pt-BR (separador `;`). Ao escrever pela API, use `;` e nomes em inglês.
 
 ## Interface
 
