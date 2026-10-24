@@ -117,10 +117,18 @@ describe('Worker /api', () => {
     expect((await r.json()).erro).toContain('Compartilhe a planilha');
   });
 
-  it('sem configuração do Access → 500 (nunca libera os dados)', async () => {
+  it('sem configuração do Access → 500 dizendo o que falta (nunca libera os dados)', async () => {
     simularRede();
     const r = await pedir('/api/dados', env({ TEAM_DOMAIN: '', GOOGLE_SA_KEY: saKey }), await tokenAccess('rodrigo@exemplo.com'));
     expect(r.status).toBe(500);
+    expect((await r.json()).erro).toContain('TEAM_DOMAIN');
+  });
+
+  it('TEAM_DOMAIN com texto de exemplo → 500 com o formato esperado', async () => {
+    simularRede();
+    const r = await pedir('/api/eu', env({ TEAM_DOMAIN: 'https://<sua-equipe>.cloudflareaccess.com' }), await tokenAccess('rodrigo@exemplo.com'));
+    expect(r.status).toBe(500);
+    expect((await r.json()).erro).toContain('cloudflareaccess.com');
   });
 
   it('reaproveita o token do Google até perto de expirar', async () => {

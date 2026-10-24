@@ -28,14 +28,18 @@ const json = (body: unknown, status = 200) =>
 /** Chaves públicas do Access por equipe (exportado só para os testes poderem fornecer as chaves). */
 export const jwks: Record<string, JWTVerifyGetKey> = {};
 export async function usuarioDoAccess(req: Request, env: Env): Promise<string> {
-  if (!env.TEAM_DOMAIN || !env.POLICY_AUD) throw new Erro(500, 'Worker sem TEAM_DOMAIN/POLICY_AUD configurados.');
+  const faltando = (['TEAM_DOMAIN', 'POLICY_AUD', 'ALLOWED_EMAILS', 'GOOGLE_SA_KEY'] as const).filter(k => !env[k]);
+  if (!env.TEAM_DOMAIN || !env.POLICY_AUD) throw new Erro(500, `O Worker não está vendo estas variáveis: ${faltando.join(', ')}. `
+    + 'Cadastre em Configurações → Variáveis e segredos (no topo da página, não na seção de Compilação) e implante de novo.');
+  if (!/^https:\/\/[a-z0-9-]+\.cloudflareaccess\.com\/?$/.test(env.TEAM_DOMAIN.trim()))
+    throw new Erro(500, 'TEAM_DOMAIN deve ser no formato https://<equipe>.cloudflareaccess.com (o "Full domain" do Zero Trust, com https://).');
   const token = req.headers.get('cf-access-jwt-assertion');
   if (!token) throw new Erro(401, 'Sem login do Cloudflare Access.');
-  const team = env.TEAM_DOMAIN.replace(/\/$/, '');
+  const team = env.TEAM_DOMAIN.trim().replace(/\/$/, '');
   jwks[team] ??= createRemoteJWKSet(new URL(`${team}/cdn-cgi/access/certs`));
   let email = '';
   try {
-    const { payload } = await jwtVerify(token, jwks[team], { issuer: team, audience: env.POLICY_AUD });
+    const { payload } = await jwtVerify(token, jwks[team], { issuer: team, audience: env.POLICY_AUD.trim() });
     email = String(payload.email || '').toLowerCase();
   } catch { throw new Erro(401, 'Login do Cloudflare Access inválido ou expirado.'); }
   const permitidos = (env.ALLOWED_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
